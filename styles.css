@@ -1,0 +1,7 @@
+td[data-is-wall = "empty"] {
+    background-color: #FFFFFF;
+}
+
+td[data-is-wall = "wall"] {
+    background-color: #000000;
+}
