@@ -1,7 +1,15 @@
-td[data-is-wall = "empty"] {
+td[data-mode = "empty"] {
     background-color: #FFFFFF;
 }
 
-td[data-is-wall = "wall"] {
+td[data-mode = "wall"] {
     background-color: #000000;
+}
+
+td[data-mode = "start"] {
+    background-color: #FF0000;
+}
+
+td[data-mode = "finish"] {
+    background-color: #00FF00;
 }

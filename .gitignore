@@ -42,6 +42,9 @@
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
+# .idea/discord.xml
+# .idea/vcs.xml
+# .idea/workspace.xml
 # *.iml
 # *.ipr
 

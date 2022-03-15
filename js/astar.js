@@ -1,11 +1,12 @@
 const matrix = new Array();
+document.getElementById("acceptChangesButton").style.display = 'none';
+document.getElementById("makeChangesButton").style.display = 'none';
 
 // класс точки
 class Point {
     x;
     y;
 }
-
 // возвращает случайное целое число в диапазоне [min; max)
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -34,7 +35,7 @@ function primmLabyrinth() {
     // добавить пустое поле
     function makeEmpty(x, y) {
         matrix[x][y] = 0;
-        document.getElementById('lab').rows[x].cells[y].dataset.isWall = "empty";
+        document.getElementById('lab').rows[x].cells[y].dataset.mode = "empty";
     }
 
     // превращаем все ячейки в стены
@@ -43,7 +44,7 @@ function primmLabyrinth() {
         matrix[i] = new Array();
         for (var j = 0; j < size; j++) {
             matrix[i][j] = 1;
-            document.getElementById('lab').rows[i].cells[j].dataset.isWall = "wall";
+            document.getElementById('lab').rows[i].cells[j].dataset.mode = "wall";
         }
     }
 
@@ -129,10 +130,16 @@ function createWall() {
     var cell = event.target;
     var x = cell.dataset.x, y = cell.dataset.y;
 
-    cell.dataset.isWall = (cell.dataset.isWall === "wall") ? "empty" : "wall";
+    cell.dataset.mode = (cell.dataset.mode === "wall") ? "empty" : "wall";
     matrix[x][y] = (matrix[x][y] === 1) ? 0 : 1;
 }
 
+function createTarget() {
+    var cell = event.target;
+    if (cell.dataset.mode === "empty"){
+        cell.dataset.mode = "start";
+    }
+}
 // функция создает таблицу n*n
 function createTable(){
     // удалить уже существующую до этого таблицу
@@ -155,7 +162,7 @@ function createTable(){
         for (var row = 0; row < size; row++) {
             cell = r.insertCell(row);
 
-            cell.dataset.isWall = "empty"; // тип клетки - стена\поле
+            cell.dataset.mode = "empty"; // тип клетки - стена\поле
             cell.dataset.x = column; // координата x
             cell.dataset.y = row; // координата y
 
@@ -168,5 +175,34 @@ function createTable(){
 
     table.addEventListener("click", createWall)
     document.body.appendChild(table);
+
+    document.getElementById("acceptChangesButton").style.display = "";
 }
 
+function acceptChanges() {
+    // сделать неактивными ввод размерности матрицы, кнопки ее создания и кнопки создания лабиринта
+    document.getElementById("labSize").disabled = true;
+    document.getElementById("labButton").disabled = true;
+    document.getElementById("primmButton").disabled = true;
+
+    var table = document.getElementById("lab");
+    table.removeEventListener("click", createWall); // перестать делать стены по нажатию на ячейку
+    table.addEventListener("click", createTarget); // начать ставить цели
+
+    document.getElementById("acceptChangesButton").style.display = "none"; // скрыть кнопку ПРИМЕНИТЬ
+    document.getElementById("makeChangesButton").style.display = ""; // отобразить кнопку ИЗМЕНИТЬ
+
+}
+// действия, обратные acceptChanges()
+function makeChanges() {
+    document.getElementById("labSize").disabled = false;
+    document.getElementById("labButton").disabled = false;
+    document.getElementById("primmButton").disabled = false;
+
+    var table = document.getElementById("lab");
+    table.removeEventListener("click", createTarget); // перестать делать стены по нажатию на ячейку
+    table.addEventListener("click", createWall); // начать ставить цели
+
+    document.getElementById("acceptChangesButton").style.display = "";
+    document.getElementById("makeChangesButton").style.display = "none";
+}
