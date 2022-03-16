@@ -1,0 +1,9 @@
+.btn{
+    margin: 10px;
+}
+#canvas{
+    margin: 10px;
+}
+#btn-main{
+    display: flex;
+}
