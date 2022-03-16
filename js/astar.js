@@ -275,7 +275,7 @@ function makeChanges() {
 // A*
 function aStar(){
 
-    // эвристика для алгоритма
+    // эвристика для алгоритма - Манхэттен
     function heuristic(v, end) {
         return Math.abs(v.x - end.x) + Math.abs(v.y - end.y)
     }
@@ -343,6 +343,11 @@ function aStar(){
                 }
             }
         }
+    }
+
+    if (current.x != finish.x && current.y != finish.y) {
+        alert("no fucking way");
+        return;
     }
 
     for(;current.parent != null; current = current.parent) {
