@@ -4,11 +4,24 @@ document.getElementById("makeChangesButton").style.display = 'none';
 document.getElementById("pathSearchButton").style.display = 'none';
 document.getElementById("pathChangeButton").style.display = 'none';
 
+class Node {
+    parent = null;
+    x = 0;
+    y = 0;
+    g = 0;
+    h = 0;
+    f = 0;
+}
+
 // класс точки
 class Point {
     x = null;
     y = null;
     inUse = 0;
+}
+
+function isInside(x, y, size) {
+    return (x >= 0 && y >= 0 && x < size && y < size);
 }
 
 // возвращает случайное целое число в диапазоне [min; max)
@@ -24,9 +37,6 @@ function primmLabyrinth() {
 
     // находится ли координата (x, y) внутри диапазона
     var size = document.getElementById('labSize').value;
-    function isInside(x, y) {
-        return (x >= 0 && y >= 0 && x < size && y < size);
-    }
 
     // создать точку с координатами (x, y)
     function createPoint(x, y) {
@@ -60,16 +70,16 @@ function primmLabyrinth() {
     var newFields = new Array();
 
     // находим соседей этой точки
-    if (isInside(cell.x + 2, cell.y))
+    if (isInside(cell.x + 2, cell.y, size))
         newFields.push(createPoint(cell.x + 2, cell.y));
 
-    if (isInside(cell.x - 2, cell.y))
+    if (isInside(cell.x - 2, cell.y, size))
         newFields.push(createPoint(cell.x - 2, cell.y))
 
-    if (isInside(cell.x, cell.y + 2))
+    if (isInside(cell.x, cell.y + 2, size))
         newFields.push(createPoint(cell.x, cell.y + 2))
 
-    if (isInside(cell.x, cell.y - 2))
+    if (isInside(cell.x, cell.y - 2, size))
         newFields.push(createPoint(cell.x, cell.y - 2))
 
     // пока есть соседи...
@@ -88,7 +98,7 @@ function primmLabyrinth() {
             var dirIndex = getRandomInt(0, directions.length);
             var dir = directions[dirIndex];
 
-            if (isInside(x + dir[0], y + dir[1])) {
+            if (isInside(x + dir[0], y + dir[1], size)) {
 
                 if (matrix[x + dir[0]][y + dir[1]] === 0) {
                     var deltaX = (-1)**(dir[0] > 0); // прибавление по иксу: если мы шли вправо, то сдвиг влево и наоборот
@@ -111,19 +121,19 @@ function primmLabyrinth() {
         }
 
         // ищем соседей соседа
-        if (isInside(x + 2, y) && matrix[x + 2][y] === 1) {
+        if (isInside(x + 2, y, size) && matrix[x + 2][y] === 1) {
             newFields.push(createPoint(x + 2, y));
         }
 
-        if (isInside(x - 2, y) && matrix[x - 2][y] === 1) {
+        if (isInside(x - 2, y, size) && matrix[x - 2][y] === 1) {
             newFields.push(createPoint(x - 2, y));
         }
 
-        if (isInside(x, y + 2) && matrix[x][y + 2] === 1) {
+        if (isInside(x, y + 2, size) && matrix[x][y + 2] === 1) {
             newFields.push(createPoint(x, y + 2));
         }
 
-        if (isInside(x, y - 2) && matrix[x][y - 2] === 1) {
+        if (isInside(x, y - 2, size) && matrix[x][y - 2] === 1) {
             newFields.push(createPoint(x, y - 2));
         }
     }
@@ -149,13 +159,13 @@ function createTargets() {
     if (cell.dataset.mode === "empty"){
         if (start.inUse === 0) {
             cell.dataset.mode = "start";
-            start.x = cell.dataset.y;
-            start.y = cell.dataset.x;
+            start.x = Number(cell.dataset.y);
+            start.y = Number(cell.dataset.x);
             start.inUse = 1;
         } else {
             cell.dataset.mode = "finish";
-            finish.x = cell.dataset.y;
-            finish.y = cell.dataset.x;
+            finish.x = Number(cell.dataset.y);
+            finish.y = Number(cell.dataset.x);
             finish.inUse = 1;
 
             document.getElementById("pathSearchButton").style.display = '';
@@ -264,5 +274,80 @@ function makeChanges() {
 
 // A*
 function aStar(){
-    console.log([["start", start.x, start.y], ["finish", finish.x, finish.y]]);
+
+    // эвристика для алгоритма
+    function heuristic(v, end) {
+        return Math.abs(v.x - end.x) + Math.abs(v.y - end.y)
+    }
+
+    function compare(a, b) {
+        if (a.f < b.f)
+            return -1;
+        if (a.f > b.f)
+            return 1;
+        else
+            return 0;
+    }
+
+    var size = document.getElementById('labSize').value;
+
+    var stNode = new Node();
+    stNode.x = Number(start.x);
+    stNode.y = Number(start.y);
+
+    var openList = []; // список точек, подлежащих проверке
+    openList.push(stNode)
+
+    var closedList = []; // список уже проверенных точек
+
+    var current = new Node();
+
+    while (openList.length > 0) {
+        openList.sort(compare);
+
+        current = openList[0];
+
+        if (current.x === finish.x && current.y === finish.y) {
+            break;
+        }
+
+        openList.splice(openList.indexOf(current), 1);
+        closedList.push(current);
+
+        let directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (var dir of directions) {
+            var new_neighbour = new Node();
+            new_neighbour.x = current.x + dir[0];
+            new_neighbour.y = current.y + dir[1];
+
+            var isClosed = closedList.find(el => (el.x === new_neighbour.x && el.y === new_neighbour.y));
+            var neighbour = openList.find(el => (el.x === new_neighbour.x && el.y === new_neighbour.y));
+
+            if (isInside(new_neighbour.x, new_neighbour.y, size) && matrix[new_neighbour.y][new_neighbour.x] === 0 && isClosed == null) {
+                if (neighbour == null && typeof neighbour === "undefined") {
+
+                    new_neighbour.g = current.g + 1;
+                    new_neighbour.h = heuristic(new_neighbour, finish);
+                    new_neighbour.f = new_neighbour.g + new_neighbour.h;
+
+                    new_neighbour.parent = current;
+                    openList.push(new_neighbour);
+
+                    //console.log(new_neighbour);
+                }
+                else {
+                    if (neighbour.g >= current.g + 1) {
+                        openList[openList.indexOf(neighbour)].g = current.g + 1;
+                        openList[openList.indexOf(neighbour)].parent = current;
+                    }
+                }
+            }
+        }
+    }
+
+    for(;current.parent != null; current = current.parent) {
+        document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "path"
+    }
+
+    document.getElementById("lab").rows[finish.y].cells[finish.x].dataset.mode = "finish";
 }

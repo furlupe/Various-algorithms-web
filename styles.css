@@ -13,3 +13,7 @@ td[data-mode = "start"] {
 td[data-mode = "finish"] {
     background-color: #00FF00;
 }
+
+td[data-mode = "path"] {
+    background-color: blue;
+}
