@@ -3,17 +3,22 @@
     <head>
         <meta charset="UTF-8">
         <h1>Кластеризация</h1>
-        <h2>Расставь точки кластеризации в окне ниже, затем нажми кнопку</h2>
-    </head>
-
-    <body>
-        <canvas id = "currCanvas" width = "600" height = "600" style = 
+        <p>Расставь точки и центры кластеризации в окне ниже</p>
+        <canvas id="currCanvas" width="500" height="500" style=
             "background-color: #eee; 
             border: 2px solid black;
             margin: 10px;">
             Sorry bro, no canvas for you :(
         </canvas>
-        <script src = "drawDot.js"></script>
-        <button id="clustButton" type="button" onclick="clustering.js">Начать кластеризацию</button>
+    </head>
+
+    <body>
+        <p>Чо ставим?:</p>
+        <div>
+            <input type="radio" name="radio-in" value="1" id="dot" checked> Точка <br />
+            <input type="radio" name="radio-in" value="2" id="center"> Центроид <br />
+        </div>
+        <button id="clustButton" type="button" onclick="KMeans()">Начать кластеризацию</button>
     </body>
+    <script src="clustering.js"></script>
 </html>
