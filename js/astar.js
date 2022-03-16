@@ -1,12 +1,16 @@
 const matrix = new Array();
 document.getElementById("acceptChangesButton").style.display = 'none';
 document.getElementById("makeChangesButton").style.display = 'none';
+document.getElementById("pathSearchButton").style.display = 'none';
+document.getElementById("pathChangeButton").style.display = 'none';
 
 // класс точки
 class Point {
-    x;
-    y;
+    x = null;
+    y = null;
+    inUse = 0;
 }
+
 // возвращает случайное целое число в диапазоне [min; max)
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -14,6 +18,7 @@ function getRandomInt(min, max) {
 
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
 // генерация лабиринта через алгоритм Прима
 function primmLabyrinth() {
 
@@ -123,9 +128,9 @@ function primmLabyrinth() {
         }
     }
 
-    console.log(matrix);
 }
 
+// создать стену на нажатой ячейке
 function createWall() {
     var cell = event.target;
     var x = cell.dataset.x, y = cell.dataset.y;
@@ -134,16 +139,58 @@ function createWall() {
     matrix[x][y] = (matrix[x][y] === 1) ? 0 : 1;
 }
 
-var start = new Point();
-function createTarget() {
+// точки начала пути и его конца
+var start = new Point(), finish = new Point();
+function createTargets() {
     var cell = event.target;
+    if (start.inUse === 1 && finish.inUse === 1)
+        return;
+
     if (cell.dataset.mode === "empty"){
-        cell.dataset.mode = "start";
+        if (start.inUse === 0) {
+            cell.dataset.mode = "start";
+            start.x = cell.dataset.y;
+            start.y = cell.dataset.x;
+            start.inUse = 1;
+        } else {
+            cell.dataset.mode = "finish";
+            finish.x = cell.dataset.y;
+            finish.y = cell.dataset.x;
+            finish.inUse = 1;
+
+            document.getElementById("pathSearchButton").style.display = '';
+            document.getElementById("pathChangeButton").style.display = '';
+        }
+    }
+}
+
+// очистить старт и финиш
+function clearTargets() {
+
+    if (start.inUse === 1) {
+        var st = document.getElementById("lab").rows[start.y].cells[start.x];
+
+        start.x = null;
+        start.y = null;
+        start.inUse = 0;
+
+        st.dataset.mode = "empty";
     }
 
-    start.x = cell.dataset.x;
-    start.y = cell.dataset.y;
+    if (finish.inUse === 1) {
+        var fn = document.getElementById("lab").rows[finish.y].cells[finish.x];
+
+        finish.x = null;
+        finish.y = null;
+        finish.inUse = 0;
+
+        fn.dataset.mode = "empty";
+    }
+
+    document.getElementById("pathSearchButton").style.display = 'none';
+    document.getElementById("pathChangeButton").style.display = 'none';
 }
+
 // функция создает таблицу n*n
 function createTable(){
     // удалить уже существующую до этого таблицу
@@ -183,6 +230,7 @@ function createTable(){
     document.getElementById("acceptChangesButton").style.display = "";
 }
 
+// принять созданный лабиринт
 function acceptChanges() {
     // сделать неактивными ввод размерности матрицы, кнопки ее создания и кнопки создания лабиринта
     document.getElementById("labSize").disabled = true;
@@ -191,12 +239,13 @@ function acceptChanges() {
 
     var table = document.getElementById("lab");
     table.removeEventListener("click", createWall); // перестать делать стены по нажатию на ячейку
-    table.addEventListener("click", createTarget); // начать ставить цели
+    table.addEventListener("click", createTargets); // начать ставить цели
 
     document.getElementById("acceptChangesButton").style.display = "none"; // скрыть кнопку ПРИМЕНИТЬ
     document.getElementById("makeChangesButton").style.display = ""; // отобразить кнопку ИЗМЕНИТЬ
 
 }
+
 // действия, обратные acceptChanges()
 function makeChanges() {
     document.getElementById("labSize").disabled = false;
@@ -204,9 +253,16 @@ function makeChanges() {
     document.getElementById("primmButton").disabled = false;
 
     var table = document.getElementById("lab");
-    table.removeEventListener("click", createTarget); // перестать делать стены по нажатию на ячейку
+    table.removeEventListener("click", createTargets); // перестать делать стены по нажатию на ячейку
     table.addEventListener("click", createWall); // начать ставить цели
 
     document.getElementById("acceptChangesButton").style.display = "";
     document.getElementById("makeChangesButton").style.display = "none";
+
+    clearTargets();
+}
+
+// A*
+function aStar(){
+    console.log([["start", start.x, start.y], ["finish", finish.x, finish.y]]);
 }
