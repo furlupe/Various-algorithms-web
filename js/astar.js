@@ -134,11 +134,15 @@ function createWall() {
     matrix[x][y] = (matrix[x][y] === 1) ? 0 : 1;
 }
 
+var start = new Point();
 function createTarget() {
     var cell = event.target;
     if (cell.dataset.mode === "empty"){
         cell.dataset.mode = "start";
     }
+
+    start.x = cell.dataset.x;
+    start.y = cell.dataset.y;
 }
 // функция создает таблицу n*n
 function createTable(){
