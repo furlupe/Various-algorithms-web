@@ -17,3 +17,7 @@ td[data-mode = "finish"] {
 td[data-mode = "path"] {
     background-color: blue;
 }
+
+td[data-mode = "checking"] {
+    background-color: aquamarine;
+}

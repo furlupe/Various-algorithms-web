@@ -20,6 +20,10 @@ class Point {
     inUse = 0;
 }
 
+function sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 function isInside(x, y, size) {
     return (x >= 0 && y >= 0 && x < size && y < size);
 }
@@ -227,8 +231,8 @@ function createTable(){
             cell.dataset.x = column; // координата x
             cell.dataset.y = row; // координата y
 
-            cell.height = 10;
-            cell.width = 10;
+            cell.height = 20;
+            cell.width = 20;
 
             matrix[column][row] = 0;
         }
@@ -273,13 +277,13 @@ function makeChanges() {
 }
 
 // A*
-function aStar(){
+async function aStar(){
 
     // эвристика для алгоритма - Манхэттен
     function heuristic(v, end) {
         return Math.abs(v.x - end.x) + Math.abs(v.y - end.y)
     }
-
+    // критерий сравнения двух узлов по f для сортировки
     function compare(a, b) {
         if (a.f < b.f)
             return -1;
@@ -289,7 +293,7 @@ function aStar(){
             return 0;
     }
 
-    var size = document.getElementById('labSize').value;
+    var size = document.getElementById('labSize').value; // размерность таблицы
 
     var stNode = new Node();
     stNode.x = Number(start.x);
@@ -303,10 +307,15 @@ function aStar(){
     var current = new Node();
 
     while (openList.length > 0) {
-        openList.sort(compare);
+        openList.sort(compare); // отсортировать список доступных узлов в порядке убывания
 
-        current = openList[0];
+        current = openList[0]; // взять в качестве текущего узла узел с min g
+        await sleep(75);
+        if (!(current.x == stNode.x && current.y == stNode.y)) {
+            document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "checking";
+        }
 
+        // если текущий узел = конечный, то выход
         if (current.x === finish.x && current.y === finish.y) {
             break;
         }
@@ -320,38 +329,54 @@ function aStar(){
             new_neighbour.x = current.x + dir[0];
             new_neighbour.y = current.y + dir[1];
 
+            // проверка наличия соседа узла в списке закрытых узлов
             var isClosed = closedList.find(el => (el.x === new_neighbour.x && el.y === new_neighbour.y));
+
+            // проверка наличия соседа узла в списке доступных узлов
             var neighbour = openList.find(el => (el.x === new_neighbour.x && el.y === new_neighbour.y));
 
+            // если сосед находится внутри поля, и не является стеной
             if (isInside(new_neighbour.x, new_neighbour.y, size) && matrix[new_neighbour.y][new_neighbour.x] === 0 && isClosed == null) {
+                // если соседа не было в списке открытых узлов, то добавить его
                 if (neighbour == null && typeof neighbour === "undefined") {
 
                     new_neighbour.g = current.g + 1;
                     new_neighbour.h = heuristic(new_neighbour, finish);
                     new_neighbour.f = new_neighbour.g + new_neighbour.h;
 
-                    new_neighbour.parent = current;
+                    new_neighbour.parent = current; // откуда попали в соседа, из текущего узла
                     openList.push(new_neighbour);
 
                     //console.log(new_neighbour);
                 }
+                // иначе просто обновить предка соседа и его g
                 else {
                     if (neighbour.g >= current.g + 1) {
                         openList[openList.indexOf(neighbour)].g = current.g + 1;
                         openList[openList.indexOf(neighbour)].parent = current;
                     }
                 }
+
             }
         }
     }
 
+    // если не был найден путь, вывести соответствующее сообщение
     if (current.x != finish.x && current.y != finish.y) {
         alert("no fucking way");
         return;
     }
 
+    // закрасить путь
     for(;current.parent != null; current = current.parent) {
         document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "path"
+    }
+
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            let cell = document.getElementById("lab").rows[j].cells[i];
+            cell.dataset.mode = (cell.dataset.mode == "checking") ? "empty" : cell.dataset.mode;
+        }
     }
 
     document.getElementById("lab").rows[finish.y].cells[finish.x].dataset.mode = "finish";
