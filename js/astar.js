@@ -4,6 +4,7 @@ document.getElementById("makeChangesButton").style.display = 'none';
 document.getElementById("pathSearchButton").style.display = 'none';
 document.getElementById("pathChangeButton").style.display = 'none';
 
+// класс узла для А*
 class Node {
     parent = null;
     x = 0;
@@ -20,6 +21,7 @@ class Point {
     inUse = 0;
 }
 
+// ничего делать n миллисекунд
 function sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
@@ -201,12 +203,23 @@ function clearTargets() {
         fn.dataset.mode = "empty";
     }
 
+    let size = document.getElementById('labSize').value;
+
+    // перекрасить клетки, которые были рассмотрены в процессе поиска пути
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            let cell = document.getElementById("lab").rows[j].cells[i];
+            cell.dataset.mode = (cell.dataset.mode == "path") ? "empty" : cell.dataset.mode;
+        }
+    }
+
     document.getElementById("pathSearchButton").style.display = 'none';
     document.getElementById("pathChangeButton").style.display = 'none';
 }
 
 // функция создает таблицу n*n
 function createTable(){
+
     // удалить уже существующую до этого таблицу
     var table = document.getElementById('lab');
     if (table !== null)
@@ -217,7 +230,12 @@ function createTable(){
     table.border = 1;
 
     var r, cell; // переменные для рядов и ячеек
-    var size = document.getElementById('labSize').value; // размерность таблицы
+    var size = document.getElementById('labSize').value, maxSize = document.getElementById("labSize").max; // размерность таблицы
+
+    if (size < 2) size = 2;
+
+    size = Math.min(maxSize, size);
+    document.getElementById("labSize").value = size;
 
     matrix.length = 0; // очищаем таблицу
     for (var column = 0; column < size; column++) { // заполнить таблицу n рядами и ячейками
@@ -248,7 +266,6 @@ function createTable(){
 function acceptChanges() {
     // сделать неактивными ввод размерности матрицы, кнопки ее создания и кнопки создания лабиринта
     document.getElementById("labSize").disabled = true;
-    document.getElementById("labButton").disabled = true;
     document.getElementById("primmButton").disabled = true;
 
     var table = document.getElementById("lab");
@@ -262,13 +279,14 @@ function acceptChanges() {
 
 // действия, обратные acceptChanges()
 function makeChanges() {
+    let size = document.getElementById('labSize').value;
+
     document.getElementById("labSize").disabled = false;
-    document.getElementById("labButton").disabled = false;
     document.getElementById("primmButton").disabled = false;
 
     var table = document.getElementById("lab");
-    table.removeEventListener("click", createTargets); // перестать делать стены по нажатию на ячейку
-    table.addEventListener("click", createWall); // начать ставить цели
+    table.removeEventListener("click", createTargets); // перестать делать цели по нажатию на ячейку
+    table.addEventListener("click", createWall); // начать ставить стены
 
     document.getElementById("acceptChangesButton").style.display = "";
     document.getElementById("makeChangesButton").style.display = "none";
@@ -311,7 +329,7 @@ async function aStar(){
 
         current = openList[0]; // взять в качестве текущего узла узел с min g
         await sleep(75);
-        if (!(current.x == stNode.x && current.y == stNode.y)) {
+        if (!(current.x == start.x && current.y == start.y) && !(current.x == finish.x && current.y == finish.y)) {
             document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "checking";
         }
 
@@ -362,22 +380,21 @@ async function aStar(){
     }
 
     // если не был найден путь, вывести соответствующее сообщение
-    if (current.x != finish.x && current.y != finish.y) {
-        alert("no fucking way");
-        return;
+    if (!(current.x == finish.x && current.y == finish.y)) {
+        alert(`There is no way to get from (${start.x + 1}, ${start.y + 1}) to (${finish.x + 1}, ${finish.y + 1})`);
+    } else {
+        // закрасить путь
+        for(;current.parent != null; current = current.parent) {
+            await sleep(100);
+            if (!(current.x == finish.x && current.y == finish.y))
+                document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "path"
+        }
     }
-
-    // закрасить путь
-    for(;current.parent != null; current = current.parent) {
-        document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "path"
-    }
-
+    // перекрасить клетки, которые были рассмотрены в процессе поиска пути (кроме самого пути)
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
             let cell = document.getElementById("lab").rows[j].cells[i];
             cell.dataset.mode = (cell.dataset.mode == "checking") ? "empty" : cell.dataset.mode;
         }
     }
-
-    document.getElementById("lab").rows[finish.y].cells[finish.x].dataset.mode = "finish";
 }
