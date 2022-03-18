@@ -1,9 +1,17 @@
-.btn{
-    margin: 10px;
-}
 #canvas{
     margin: 10px;
 }
-#btn-main{
-    display: flex;
+#Result{
+    color: white;
+    background-color: rgb(120, 194, 84);
+    border: none;
+    outline: none;
+    padding: 1.2rem 2rem;
+    cursor: pointer;
+    user-select: none;
+    margin: 10px;
+}
+body {
+    background: url(./img/back4.jpg) center no-repeat;
+    background-size: cover;
 }

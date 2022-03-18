@@ -5,21 +5,14 @@
     <link rel="stylesheet" href="./styles.css">
     <h1>Генетический алгоритм</h1>
 </head>
-<body>
-    <div id="btn-main">
-        <div class="btn-group vert">
-            <button type="button" class="btn btn-def" id="Graph_Add_Vertex">+ Добавить вершину</button>
-        </div>
-        <div class="btn-group vert">
-            <button type="button" class="btn btn-def" id="Graph_Connect">Соединить вершины</button>
-        </div>
+<body>  
+    <script src="algorithm.js"></script>
+    <div class="btn-group vert">
+        <button onclick="geneticAlgorithm();" type="button" class="btn btn-def" id="Result">Рассчитать кратчайший путь</button>
     </div>
-    <section id="CanvasSection">
-       <span id="CanvasMessage"></span>
-    <canvas id="canvas" width="1120" height="710" style="border:1px solid #000000;">
+    <canvas id="canvas" width="900" height="700" style="border:1px solid #000000;" >
+        Your browser does not support the HTML5 canvas tag.
     </canvas> 
-    <script>src = "canvas.js"</script>
-    </section>
-    
+    <script src = "canvas.js"></script>
 </body>
 </html>
