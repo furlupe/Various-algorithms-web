@@ -1,0 +1,17 @@
+.header{
+    text-align: center;
+}
+
+h3{
+    position: relative;
+}
+
+.canva{
+    position: absolute;
+    top: 10px;
+}
+
+.contrils{
+    display: inline-block;
+    vertical-align: top;
+}

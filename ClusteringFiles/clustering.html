@@ -2,23 +2,29 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <h1>Кластеризация</h1>
-        <p>Расставь точки и центры кластеризации в окне ниже</p>
-        <canvas id="currCanvas" width="500" height="500" style=
+        <link rel="stylesheet" href="clustering.css" type="text/css">
+        <h1 class="header">Кластеризация</h1>
+        <h3>Расставь точки и центры кластеризации в окне ниже:</h3>
+    </head>
+
+    <body>
+        <div class="canvas">
+            <canvas id="myCanvas" width="400" height="400" style=
             "background-color: #eee; 
             border: 2px solid black;
             margin: 10px;">
             Sorry bro, no canvas for you :(
-        </canvas>
-    </head>
-
-    <body>
-        <p>Чо ставим?:</p>
-        <div>
-            <input type="radio" name="radio-in" value="1" id="dot" checked> Точка <br />
-            <input type="radio" name="radio-in" value="2" id="center"> Центроид <br />
+            </canvas>
         </div>
-        <button id="clustButton" type="button" onclick="KMeans()">Начать кластеризацию</button>
+        <div class="controls">
+            <label>Какой элемент ставим?</label> </br>
+            <input type="radio" name="radio-in" id="dot" checked> Точка <br />
+            <input type="radio" name="radio-in" id="center"> Центроид <br />
+
+            <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
+            <button id="clustButton" type="button" onclick="ButtonClusterize()">Кластеризация</button>
+            <button id="clearButton" type="button" onclick="ButtonClearCanvas()">Очистить поле</button>
+        </div>
     </body>
-    <script src="clustering.js"></script>
+    <script src="clustering_test.js"></script>
 </html>
