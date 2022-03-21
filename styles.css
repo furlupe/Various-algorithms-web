@@ -2,8 +2,8 @@
     margin: 10px;
 }
 #Result{
-    color: white;
-    background-color: rgb(120, 194, 84);
+    color: black;
+    background-color: rgb(252, 140, 233);
     border: none;
     outline: none;
     padding: 1.2rem 2rem;
@@ -14,4 +14,17 @@
 body {
     background: url(./img/back4.jpg) center no-repeat;
     background-size: cover;
+}
+.output {
+    width: 200px;
+    height: 150px;
+    border: 1px solid black;
+    margin: 10px; 
+    background-color: white;
+    font-size: 30px;
+    color: black;
+    padding: 10px;
+}
+.blockBody{
+    display: flex;
 }

@@ -70,12 +70,10 @@ function drawLine() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let flag = false;
-
 function geneticAlgorithm(){
     let generations = []; //массив где будут храниться все наши поколения (пути)
     let fitness = []; //массив с длинами путей
     let countElement = numberOfelement(circles.length - 1); //генерация оптимального(нет) кол-ва предков
-
     for (let i = 0; i < countElement; i++) { //генерация первого поколения 
         generations[i] = firstGeneration(generations); 
         if (flag == true) {
@@ -83,29 +81,39 @@ function geneticAlgorithm(){
             continue;
         }
     }
-
     for (let i = 0; i < generations.length; i++) { //подсчет длин путей для каждого предка
         fitness[i] = distance(generations[i]); 
     }
-
     if(fitness.length == 2 && fitness[0] == fitness[1]) {
         console.log(generations[0]);
         console.log(fitness[0]);
+        return 0;
     }
+    let tri = 0;
+    while(tri < 300) {
+        crossover(generations, fitness);
+        tri++;    
+        console.log(fitness[outputMinIndex(fitness,0)]);
+        for(let i = 0; i < generations[outputMinIndex(fitness, 0)].length - 1; i++) {
+            console.log(generations[outputMinIndex(fitness, 0)][i].id);
+        }
+        // let element = document.querySelector('.outputFitness');
+        // element.innerHTML = outputMinIndex(fitness, 0);
+        // let elementArray = document.querySelector('.outputId');
+        // console.log(generations[outputMinIndex(fitness,0)]);
+        // elementArray.innerHTML = generations[outputMinIndex(fitness, 0)].id;
+    } 
 
-    
 }
 
 //генерация первого поколения
 function firstGeneration (generations) {
     let editChromosome = [];
-
     editChromosome = circles.slice();
     editChromosome.shift();
     shuffle(editChromosome);
     editChromosome.push(circles[0]);
     editChromosome.unshift(circles[0]);
-
     //проверка на наличие
     for(let i = 0; i < generations.length; i++) {
         if (generations[i] == editChromosome) { 
@@ -113,71 +121,121 @@ function firstGeneration (generations) {
             break;
         }
     }
-
     return editChromosome;
 }
 
 //кроссинговер или скрещивание
-function crossoverBest(generation, fitness) {
-    // let indexMin;
-    // let indexPreMin;
-    // let copy = fitness.slice();
+function crossover(generations, fitness) {
+    // console.log(generations);
+    
 
-    // copy.sort(function(a, b) {
-    //     return a - b;
-    // });
+    // рандомно выбираем родителей
+    let ancestor1 = generations[getRandomInt(0, generations.length - 1)];
+    let ancestor2 = generations[getRandomInt(0, generations.length - 1)];
+    while(ancestor1 == ancestor2) {
+        ancestor2 = generations[getRandomInt(0, generations.length - 1)];
+    }
+    //заполняем геном
+    let child1 = fillingGenes(ancestor1, ancestor2); 
+    let child2 = fillingGenes(ancestor2, ancestor1);
+    while(child1 == child2) {
+        child2 = fillingGenes(ancestor2, ancestor1);
+    }
+   
 
-    // for(let i = 0; i < fitness.length; i++) {
-    //     if(fitness[i] == copy[0]) {
-    //         indexMin = i;
-    //     }
-    //     if(fitness[i] == copy[1]){
-    //         indexPreMin = i;
-    //     }
-    // }
+    // console.log(ancestor1);
+    // console.log(ancestor2);
+    // console.log(child1);
+    // console.log(child2);
+    // let sign = checkChild(ancestor1, ancestor2, child1, child2);
+    // if(sign == 1)
 
-    //рандомно выбираем родителей
-    let ancestor1 = generation[getRandomInt(generation.length - 1)];
-    let ancestor2 = generation[getRandomInt(generation.length - 1)];
-    // let length = ancestor1.length - 2;
-    let child1;
-    let child2;
-    child1 = ancestor1.slice();
+    //вычисляем длины путей
+    //добавляем потомков в наше поколение, добавляем длины путей(фитнесс)
+    fitness.push(distance(child1));
+    fitness.push(distance(child2));
+    generations.push(child1);
+    generations.push(child2);
+    //находим 2 наихудших хромомсомы
+    let indexMax = outputMinIndex(fitness, fitness.length - 1);
+    let indexPreMax = outputMinIndex(fitness, fitness.length - 2);
+    //удаляем их из поколения и фитнессов(они сдохли для нас)
+    fitness.splice(indexMax, 1);
+    fitness.splice(indexPreMax, 1);
+    generations.splice(indexMax, 1);
+    generations.splice(indexPreMax, 1);
+}
 
+//заполняем геном
+function fillingGenes(ancestor1, ancestor2) {
+    //выбирая точку разрыва заполняем первый сектор генами родителей
+    let averageGenes = numberOfGenes(ancestor1.length - 2);
+    let child = ancestor1.slice(0, (((ancestor1.length - 2) - averageGenes) / 2) + 1);
+    let i = ((ancestor2.length - 2) - averageGenes) / 2 + 1;
+    //заполняем гены потомков генами противополжных родителей после точки разрыва
+    while(i < ancestor2.length) {
+        if(!child.includes(ancestor2[i])){
+            child.push(ancestor2[i]);
+        }
+        i++;
+    }
+    //если хромомсома потомка заполнена не до конца, заполняем генами начального родителя после точки разрыва
+    i = ((ancestor2.length - 2) - averageGenes) / 2 + 1;
+    if(child.length != ancestor1.length - 1) {
+        while(i < ancestor1.length) {
+            if(!child.includes(ancestor1[i])){
+            child.push(ancestor1[i]);
+            }
+            i++;
+        }
+    }
+    //вставляем конец(из начала)
+    child.push(child[0]);
+    child = mutation(child);
+    return child;
+}
+
+//мутация
+function mutation(child) {
+    //генерируем число для процентажа мутаций
+    let mutationPercentage = 80;
+    let number = getRandomInt(0, 100);
+    //выполянем ее сменой двух любых генов
+    if(number < mutationPercentage) {
+        child = swap(child, getRandomInt(1, child.length - 2), getRandomInt(1, child.length - 2));
+    }
+    return child;
 }
 
 //нахождение дистанции(фитнесса)
 function distance(chromosome) {
     let resultDistance = 0;
-
-    for (let i = 0; i < chromosome.length - 1; i++) { //расстояние от точки до точки
+    //расстояние от точки до точки
+    for (let i = 0; i < chromosome.length - 1; i++) { 
         let xDist;
         let yDist;
         let Dist;
-
         xDist = Math.abs(chromosome[i].x - chromosome[i + 1].x);
         yDist = Math.abs(chromosome[i].y - chromosome[i + 1].y);
         Dist = Math.sqrt((Math.pow(xDist, 2)) + (Math.pow(yDist, 2)));
         resultDistance += Dist;
     }
-
     return resultDistance;
 }
 
 //перемешивание массива
 function shuffle(array) {
-
     for (let i = array.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-//нахождение оптимального(нет) кол-ва предков
+//нахождение оптимального(нет) кол-ва хромосом
 function numberOfelement(length) {
     let fact = 1;
     if(length <= 3) {
-        return 2;
+        return 3;
     }
     for(let i = length; i > length - 2; i--){
         fact *= i;
@@ -195,13 +253,57 @@ function averageFitness(distances) {
 }
 
 //рандом
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+  }
 
 //выбор кол-ва генов для кроссинговера
 function numberOfGenes(lengthOfChromosome) {
     if(lengthOfChromosome % 3 == 0) {
-
+        return lengthOfChromosome / 3;
     }
+    else if(lengthOfChromosome % 3 == 1) {
+        return ((lengthOfChromosome - 1) / 3) + 1;
+    }
+    else return ((lengthOfChromosome - 2) / 3) + 2;
 }
+
+//меняем местами элементы
+function swap(array, i, j) {
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+    return array;
+}
+
+function outputMinIndex(array, index) {
+    let copy = array.slice();
+    let minIndex;  
+    copy.sort(function(a, b) {
+        return a - b;
+    });
+    for(let i = 0; i < array.length; i++) {
+        if(array[i] == copy[index]) {
+            minIndex = i;
+            break;
+        }
+    }
+    return minIndex;
+}
+
+// function checkChild(ancestor1, ancestor2, child1, child2) {
+//     if(ancestor1 == child1 || ancestor2 == child1) {
+//         return 1;
+//     }
+//     else if (ancestor1 == child2 || ancestor2 == child2) {
+//         return 2;
+//     }
+//     else if (child1 == child2) {
+//         return 1;
+//     }
+//     else {
+//         return 0;
+//     }
+// }
