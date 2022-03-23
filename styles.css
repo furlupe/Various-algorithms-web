@@ -13,8 +13,10 @@ html{
     cursor: pointer;
     user-select: none;
     margin: 10px;
+    font-size: 20px;
 }
 body {
+    font-size: 20px;
     background: url(./img/back4.jpg) center no-repeat;
     background-size: cover;
 }
@@ -30,7 +32,6 @@ table {
     display: flex;
 }
 thead{
-    font-size: 20px;
     display: inline-block;
 } 
 td, tr {

@@ -90,26 +90,27 @@ function geneticAlgorithm(){
     let outputFitness = [];
     let outputId = [];
     let tri = 0;
-    let countRepeat = 0;
+    if((fitness.length == 2 && fitness[0] == fitness[1]) || fitness.length == 1 || fitness.length == 3) {
+        outputId.push(generations[0]);
+        outputFitness.push(fitness[0]);
+    }
+    // let countRepeat = 0;
     let fl = false;
-    while(tri < 900) {
-        if(fitness.length == 2 && fitness[0] == fitness[1]) {
-            outputId.push(generations[0]);
-            outputFitness.push(fitness[0]);
-            break;
-        }
+    while(countRepeat(fitness, fitness[outputMinIndex(fitness, 0)]) <= fitness.length / 4) {
         crossover(generations, fitness);
+        // console.log(countRepeat);
         tri++;    
         if(!outputFitness.includes(fitness[outputMinIndex(fitness, 0)])) {
             outputFitness.push(fitness[outputMinIndex(fitness, 0)]);
             fl = true;
+            // countRepeat = 0;
         }
         if(!outputId.includes(generations[outputMinIndex(fitness, 0)]) && fl == true) {
             outputId.push(generations[outputMinIndex(fitness, 0)]);
         }
-        if(fl == false) {
-            countRepeat ++;
-        }
+        // if(fl == false) {
+        //     countRepeat += 1;
+        // }
         fl = false;
         // console.log(fitness.length);
         // console.log(generations.length);
@@ -124,17 +125,21 @@ function geneticAlgorithm(){
         // elementArray.innerHTML = generations[outputMinIndex(fitness, 0)].id;
         // console.log(outputId);
         // console.log(outputMinIndex(fitness, 0));
-        // console.log(outputFitness);
-        
     } 
+    //вывод крч
     let result = [];
     for (let i=0; i<outputId.length; i++){
-        result.push(outputId[i].map(elem => elem.id).join(""));
+        result.push(outputId[i].map(elem => elem.id).join(" "));
     }
-
+    let floorFitness = [];
+    for(let i = 0; i < outputFitness.length; i++) {
+        floorFitness[i] = Math.floor(outputFitness[i]);
+    }
+    // console.log(floorFitness);
+    // console.log(floorFitness);
     let arr =[]
-    arr=result.map((x, i) => ({ result: result[i], outputFitness: outputFitness[i] }))
-    console.table(result.map((x, i) => ({ result: result[i], outputFitness: outputFitness[i] })))
+    arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] }))
+    console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] })))
 
     let table = document.createElement('table');
     let tbody = document.createElement('tbody');
@@ -154,7 +159,7 @@ function geneticAlgorithm(){
         tr.appendChild(td2);
     
         let td3 = document.createElement('td');
-        td3.innerHTML = ind.outputFitness;
+        td3.innerHTML = ind.floorFitness;
         tr.appendChild(td3);
 
         tbody.appendChild(tr);
@@ -192,20 +197,25 @@ function crossover(generations, fitness) {
     //         }
     //     }
     // }
+
+    //рандомный выбор родителей
     let ancestor1 = generations[getRandomInt(0, generations.length - 1)];
     let ancestor2 = generations[getRandomInt(0, generations.length - 1)];
     
-    while(ancestor1 == ancestor2) {
-        ancestor2 = generations[getRandomInt(0, generations.length - 1)];
-    }
+    // while(ancestor1 == ancestor2) {
+    //     ancestor2 = generations[getRandomInt(0, generations.length - 1)];
+    // }
     //заполняем геном
     let child1 = fillingGenes(ancestor1, ancestor2); 
     let child2 = fillingGenes(ancestor2, ancestor1);
-    while(child1 == child2 || child2 == ancestor1 || child2 == ancestor2 || allChromosome.includes(child2) || fitness.includes(distance(child2))) {
+    while(child1 == child2) {
         child2 = fillingGenes(ancestor2, ancestor1);
+        // || child2 == ancestor1 || child2 == ancestor2
     }
-    while(child1 == child2 || child1 == ancestor1 || child1 == ancestor2 || allChromosome.includes(child1) || fitness.includes(distance(child1))) {
+    while(child1 == child2) {
         child1 = fillingGenes(ancestor1, ancestor2);
+        //  || child1 == ancestor1 || child1 == ancestor2
+        // distance(child2) <= Math.min(distance(ancestor1), distance(ancestor2))
     }
     allChromosome.push(child1);
     allChromosome.push(child2);
@@ -269,11 +279,28 @@ function fillingGenes(ancestor1, ancestor2) {
 //мутация
 function mutation(child) {
     //генерируем число для процентажа мутаций
-    let mutationPercentage = 30;
+    let mutationPercentage1 = 50;
+    let mutationPercentage2 = 20;
     let number = getRandomInt(0, 100);
+    //генерируем начало и конец реверса
+    let index1 = getRandomInt(1, child.length - 2);
+    let index2 = getRandomInt(1, child.length - 2);
+    while (index1 == index2) {
+        index2 = getRandomInt(1, child.length - 2);
+    }
+    //делаем реверс куска
+    if(number < mutationPercentage1) {
+        let copy = child.slice(index1, index2 + 1);
+        copy.reverse();
+        let j = index1;
+        for(let i = 0; i < copy.length; i++) {
+            child[j] = copy[i];
+            j++;
+        }
+    }
     //выполянем ее сменой двух любых генов
-    if(number < mutationPercentage) {
-        child = swap(child, getRandomInt(1, child.length - 2), getRandomInt(1, child.length - 2));
+    if(number < mutationPercentage2) {
+        child = swap(child, index1, index2);
     }
     return child;
 }
@@ -308,7 +335,7 @@ function numberOfelement(length) {
     if(length <= 3) {
         return 3;
     }
-    for(let i = length; i > length - 2; i--){
+    for(let i = length; i > length - 3; i--){
         fact *= i;
     }
     return fact;
@@ -362,6 +389,15 @@ function outputMinIndex(array, index) {
         }
     }
     return minIndex;
+}
+function countRepeat(array, value) {
+    let count = 0;
+    for(let i = 0; i < array.length; i++){
+        if(array[i] == value) {
+            count ++;
+        }
+    }
+    return count;
 }
 
 // function checkChild(ancestor1, ancestor2, child1, child2) {
