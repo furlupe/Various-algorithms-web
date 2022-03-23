@@ -70,7 +70,7 @@ class Network {
 
         /*
         for (let neuron = 0; neuron < this.layerNeuronsN[this.layerN - 1]; neuron++) {
-            cost += (values[this.layerN - 1] - )
+            cost += (values[this.layerN - 1][neuron] - )
         }*/
 
         cost *= 1/2;
