@@ -21,6 +21,15 @@
             <input type="radio" name="radio-in" id="dot" checked> Точка <br />
             <input type="radio" name="radio-in" id="center"> Центроид <br />
 
+            <label>Метрика: 
+                <select id="distanceBox">
+                    <option value="Euclidian" selected>Евклидова</option>
+                    <option value="EuclidianSq">Квадрат евклидова</option>
+                    <option value="Manchattan">Манхэттенское</option>
+                    <option value="Chebichev">Чебышева</option>
+                </select>
+            </label>
+
             <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
             <button id="clustButton" type="button" onclick="ButtonClusterize()">Кластеризация</button>
             <button id="clearButton" type="button" onclick="ButtonClearCanvas()">Очистить поле</button>

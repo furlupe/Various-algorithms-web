@@ -23,17 +23,24 @@ K_Means.prototype.ClearClusters = function(){
         this.clusters[i].dots.length = 0;
     }
 }
-//расстояние (Евклидовов)
-K_Means.prototype.Distance = function(dot, center){
-    return Math.sqrt((center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y));
+//расстояние (разные метрики)
+K_Means.prototype.Distance = function(dot, center, distType){
+    if (distType == "Euclidian")
+        return Math.sqrt((center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y));
+    if (distType == "EuclidianSq")
+        return (center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y);
+    if (distType == "Manchattan")
+        return Math.abs(center.x-dot.x) + Math.abs(center.y-dot.y);
+    if (distType == "Chebichev")
+        return Math.max(Math.abs(center.x-dot.x),Math.abs(center.y-dot.y));
 }
 //Поиск кластера для точки
-K_Means.prototype.GetClusterIndex = function(dot){
+K_Means.prototype.GetClusterIndex = function(dot, distType){
     console.log(1);
     let minIndex = 0;
-    let minDist = this.Distance(dot, this.clusters[0].center);
+    let minDist = this.Distance(dot, this.clusters[0].center, distType);
     for (let i = 1; i < this.clusters.length; i++){
-        let currDist = this.Distance(dot, this.clusters[i].center)
+        let currDist = this.Distance(dot, this.clusters[i].center, distType)
         if (currDist < minDist){
             minDist = currDist;
             minIndex = i;
@@ -71,7 +78,7 @@ K_Means.prototype.IsChangedCentroids = function(){
     return isChanged;
 }
 //Рисовать области
-K_Means.prototype.DrawAreas = function(){
+K_Means.prototype.DrawAreas = function(distType){
     if (this.clusters.length < 2){
         let part = 17;
         this.ctx.fillStyle = 'hsl('+part+', 80%, 90%)';
@@ -81,7 +88,7 @@ K_Means.prototype.DrawAreas = function(){
         for (let h = 0; h < this.height; h++){
             for (let w = 0; w < this.width; w++){
                 let currPiece = {x: h, y: w};
-                let index = this.GetClusterIndex(currPiece);
+                let index = this.GetClusterIndex(currPiece, distType);
                 let part = index*17;
                 this.ctx.fillStyle = 'hsl('+part+', 80%, 90%)';
                 this.ctx.fillRect(h, w, 1, 1);
@@ -116,11 +123,11 @@ K_Means.prototype.DrawDots = function(){
     }
 }
 //Рисуем
-K_Means.prototype.Draw = function(drawAreas = null){
+K_Means.prototype.Draw = function(distType, drawAreas = null){
     this.ctx.fillStyle='#eee';
     this.ctx.fillRect(0, 0, this.width, this.height);
     if (drawAreas != null){
-        this.DrawAreas();
+        this.DrawAreas(distType);
     }
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
@@ -130,12 +137,12 @@ K_Means.prototype.Draw = function(drawAreas = null){
     }
 }
 //Кластеризация
-K_Means.prototype.Clusterize = function(){
+K_Means.prototype.Clusterize = function(distType){
     do{
         this.ClearClusters();
         for(let i = 0; i < this.dots.length; i++){
             let dot={x:this.dots[i].x, y:this.dots[i].y};
-            let index=this.GetClusterIndex(dot);
+            let index=this.GetClusterIndex(dot, distType);
             this.clusters[index].dots.push(dot);
         }
     }
@@ -149,11 +156,12 @@ K_Means.prototype.ClearCanvas = function(){
 }
 
 let canvas = document.getElementById("myCanvas");
+let distType = document.getElementById("distanceBox");
 var ctx=canvas.getContext('2d');
 let drawAreas=document.getElementById("areasCheckbox")
 let k_means = new K_Means(canvas);
 
-k_means.Draw();
+k_means.Draw(distType.value);
 canvas.addEventListener("click", e => {
     var mouse = {x:0, y:0}; //позиция курсора
     mouse.x = e.offsetX; //координаты
@@ -165,16 +173,16 @@ canvas.addEventListener("click", e => {
     else{
         k_means.AddCenter(mouse.x, mouse.y);
     }
-    k_means.Draw();
+    k_means.Draw(distType.value);
 });
 //Кнопка кластеризации
 function ButtonClusterize(){
-    k_means.Clusterize();
+    k_means.Clusterize(distType.value);
     if (drawAreas.checked){
-        k_means.Draw(drawAreas.value);
+        k_means.Draw(distType.value, drawAreas.value);
     }
     else{
-        k_means.Draw();
+        k_means.Draw(distType.value);
     }
 }
 //Кнопка очистки поля
