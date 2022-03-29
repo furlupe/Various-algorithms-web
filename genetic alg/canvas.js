@@ -46,7 +46,7 @@ function drawCircles() {
         context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
         context.fillStyle = circle.color;
         context.strokeStyle = "black";
-        circle[i].fillText("Fill text", 20, 50);
+        // circle[i].fillText("Fill text", 20, 50);
         context.fill();
         context.stroke(); 
     }
