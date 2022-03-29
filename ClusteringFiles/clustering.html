@@ -17,18 +17,17 @@
             </canvas>
         </div>
         <div class="controls">
-            <label>Какой элемент ставим?</label> </br>
-            <input type="radio" name="radio-in" id="dot" checked> Точка <br />
-            <input type="radio" name="radio-in" id="center"> Центроид <br />
+            <label>Выберите количество кластеров:
+                <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
+            </label> </br>
 
-            <label>Метрика: 
+            <label>Расстояние: 
                 <select id="distanceBox">
-                    <option value="Euclidian" selected>Евклидова</option>
-                    <option value="EuclidianSq">Квадрат евклидова</option>
+                    <option value="Euclidian" selected>Евклидово</option>
                     <option value="Manchattan">Манхэттенское</option>
                     <option value="Chebichev">Чебышева</option>
                 </select>
-            </label>
+            </label> </br>
 
             <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
             <button id="clustButton" type="button" onclick="ButtonClusterize()">Кластеризация</button>
