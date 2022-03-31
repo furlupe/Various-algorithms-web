@@ -14,7 +14,7 @@ function matrixMultiplication(a, b) {
 }
 
 // сложение матриц
-function matrixAddition(a, b, func) {
+function matrixAddition(a, b, func=function(x) {return x}) {
     let result = Array(a.length).fill().map( () => [])
     for (let i = 0; i < a.length; i++) {
         for (let j = 0; j < a[0].length; j++) {
@@ -137,17 +137,40 @@ class Network {
         return this.sigmoid(x) * (1 - this.sigmoid(x));
     }
 
+    // передача изображения в НС
     feedforward(a) {
         for (let k = 0; k < this.num_layers - 1; k++) {
+            // обычный линал - перемножение входной матрицы-столбца на веса след.слоя с последующим прибавлением сдвига след. слоя
             a = matrixAddition(matrixMultiplication(this.weights[k], a), this.biases[k], this.sigmoid);
         }
         return a;
     }
 }
 
+function resizeImage(img, scale = 0.2) {
+    const canvas = document.createElement("canvas"),
+        context = canvas.getContext("2d");
+
+    const ogW = img.width,
+        ogH = img.height;
+
+    canvas.width = ogW * scale;
+    canvas.height = ogH * scale;
+
+    context.drawImage(
+        img,
+        0,
+        0,
+        ogW * scale,
+        ogH * scale
+    );
+
+    return context.getImageData(0, 0, canvas.width, canvas.height);
+}
+
 function show() {
     net = new Network([784, 30, 10]);
-    test = [[0.        ],
+    /*let test = [[0.        ],
         [0.        ],
         [0.        ],
         [0.        ],
@@ -930,8 +953,82 @@ function show() {
         [0.        ],
         [0.        ],
         [0.        ],
-        [0.        ]];
-    
-    let a = net.feedforward(test);
-    console.log(a);
+        [0.        ]];*/
+
+    //let a = net.feedforward(test);
+    let img = new Image();
+    img.src = canvas.toDataURL();
+
+    img.onload = () => {
+        let r = resizeImage(img);
+
+        let test = new Array(28 ** 2)
+        for (let i = 3; i < r.data.length; i += 4) {
+            test[ Math.floor(i / 4) ] = [ (r.data[i] / 255.0) ];
+        }
+
+        let a = net.feedforward(test),
+            mx = 0.0, ind = 0;
+
+        for (let num = 0; num < a.length; num++) {
+            if (a[num][0] >= mx) {
+                mx = a[num][0];
+                ind = num;
+            }
+        }
+
+        console.log(a, ind);
+
+        if (document.getElementById("answer") !== null) {
+            document.getElementById("answer").remove();
+        }
+
+        let label = document.createElement("label");
+        label.id = "answer"
+        label.innerHTML = ind;
+        document.getElementById("main").appendChild(label);
+    }
+}
+
+// поле для рисования
+let canvas = document.getElementById("drawfield"),
+    context = canvas.getContext("2d"),
+    w = canvas.width, h = canvas.height;
+
+context.lineWidth = 10;
+
+let mouse = { x:0, y:0 };
+let draw = false;
+
+// по нажатию мышки разрешаем рисовать
+canvas.addEventListener("mousedown", function (e) {
+    mouse.x = e.pageX - this.offsetLeft;
+    mouse.y = e.pageY - this.offsetTop;
+    draw = true;
+    context.beginPath();
+    context.moveTo(mouse.x, mouse.y);
+});
+
+// по движению мышки рисуем
+canvas.addEventListener("mousemove", function (e) {
+    if (draw==true){
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        context.lineTo(mouse.x, mouse.y);
+        context.stroke();
+    }
+});
+
+// по отпусканию мышки запрещаем рисовать
+canvas.addEventListener("mouseup", function (e) {
+    mouse.x = e.pageX - this.offsetLeft;
+    mouse.y = e.pageY - this.offsetTop;
+    context.lineTo(mouse.x, mouse.y);
+    context.stroke();
+    context.closePath();
+    draw = false;
+});
+
+function clearCanvas() {
+    context.clearRect(0,0, canvas.width, canvas.height);
 }
