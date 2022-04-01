@@ -4,7 +4,7 @@ window.onload = function() {
     context = canvas.getContext("2d");  
     context.beginPath();
     context.rect(0, 0, 900, 700);
-    context.fillStyle = "white";
+    context.fillStyle = "rgba(0, 0, 0, 0)";
     context.fill();
 }
 
@@ -27,14 +27,19 @@ canvas.onmousedown = function(event){
     let y = event.offsetY || 0;
     id= ++id;
     // Создаем новый круг
-    let circle = new Circle(x, y, 20, "pink");
+    let circle = new Circle(x, y, 20, "");
     // Сохраняем его в массиве
     circles.push(circle);
     console.log(circles);
-    drawCircles();
+    
+   
     if (circles.length >= 2){
         drawLine();
-    }
+    } 
+    drawCircles();
+    circles.forEach(function(item) {
+        drawCText(item);
+    })
 }
 
 function drawCircles() {
@@ -44,14 +49,23 @@ function drawCircles() {
         // Рисуем текущий круг
         context.beginPath();
         context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
-        context.fillStyle = circle.color;
+        context.fillStyle = "pink";
         context.strokeStyle = "black";
-        // circle[i].fillText("Fill text", 20, 50);
         context.fill();
         context.stroke(); 
     }
 }
-
+function drawCText(item) {
+    console.log(item);
+        context.beginPath();
+        context.textAlign = "center"
+        context.fillStyle = "black";
+        context.strokeStyle = "black";
+        context.font = "26px Genshin Impact";
+        context.fillText(item.id, item.x,  item.y+(item.radius/2));
+        context.fill();
+        context.stroke(); 
+}
 function drawLine() {
     let x0 = circles[circles.length-1].x;
     let y0 = circles[circles.length-1].y;
