@@ -123,23 +123,8 @@ function geneticAlgorithm(){
         if(!outputId.includes(generations[outputMinIndex(fitness, 0)]) && fl == true) {
             outputId.push(generations[outputMinIndex(fitness, 0)]);
         }
-        // if(fl == false) {
-        //     countRepeat += 1;
-        // }
+     
         fl = false;
-        // console.log(fitness.length);
-        // console.log(generations.length);
-        // console.log(fitness[outputMinIndex(fitness,0)]);
-        // for(let i = 0; i < generations[outputMinIndex(fitness, 0)].length - 1; i++) {
-        //     console.log(generations[outputMinIndex(fitness, 0)][i].id);
-        // }
-        // let element = document.querySelector('.outputFitness');
-        // element.innerHTML = outputMinIndex(fitness, 0);
-        // let elementArray = document.querySelector('.outputId');
-        // console.log(generations[outputMinIndex(fitness,0)]);
-        // elementArray.innerHTML = generations[outputMinIndex(fitness, 0)].id;
-        // console.log(outputId);
-        // console.log(outputMinIndex(fitness, 0));
     } 
     //вывод крч
     let result = [];
@@ -150,8 +135,6 @@ function geneticAlgorithm(){
     for(let i = 0; i < outputFitness.length; i++) {
         floorFitness[i] = Math.floor(outputFitness[i]);
     }
-    // console.log(floorFitness);
-    // console.log(floorFitness);
     let arr =[]
     arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] }))
     console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] })))
@@ -194,24 +177,6 @@ function firstGeneration () {
 
 //кроссинговер или скрещивание
 function crossover(generations, fitness) {
-    // console.log(generations);
-    
-
-    // нерандомно выбираем родителей
-    // let indexBest1 = outputMinIndex(fitness, 0);
-    // let indexBest2 = outputMinIndex(fitness, 1);
-    // if(indexBest2 == indexBest1) {
-    //     let copy = fitness.slice();
-    //     copy.sort(function(a, b) {
-    //         return a - b;
-    //     });
-    //     for(let i = 0; i < fitness.length; i++) {
-    //         if(fitness[i] == copy[1] && i != indexBest1) {
-    //         indexBest2 = i;
-    //         break;
-    //         }
-    //     }
-    // }
 
     //рандомный выбор родителей
     let ancestor1 = generations[getRandomInt(0, generations.length - 1)];
@@ -391,6 +356,7 @@ function swap(array, i, j) {
     return array;
 }
 
+//ищем минимальный путь а вернее его индекс
 function outputMinIndex(array, index) {
     let copy = array.slice();
     let minIndex;  
@@ -405,6 +371,8 @@ function outputMinIndex(array, index) {
     }
     return minIndex;
 }
+
+//число повторов в массиве
 function countRepeat(array, value) {
     let count = 0;
     for(let i = 0; i < array.length; i++){
@@ -415,17 +383,3 @@ function countRepeat(array, value) {
     return count;
 }
 
-// function checkChild(ancestor1, ancestor2, child1, child2) {
-//     if(ancestor1 == child1 || ancestor2 == child1) {
-//         return 1;
-//     }
-//     else if (ancestor1 == child2 || ancestor2 == child2) {
-//         return 2;
-//     }
-//     else if (child1 == child2) {
-//         return 1;
-//     }
-//     else {
-//         return 0;
-//     }
-// }

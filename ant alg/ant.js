@@ -154,16 +154,13 @@ function antAlgorithm() {
     }
     outputId.push(outputId[0]);
     outputFitness = distance(outputId);
-    // console.log(outputId);
-    // console.log(outputFitness);
 
+    //вывод
     let result = [];
     for (let i=0; i<outputId.length; i++){
         result.push(outputId.map(elem => elem.id).join(" "));
     }
     let floorFitness = Math.round(outputFitness);
-    // console.log(floorFitness);
-    // console.log(floorFitness);
     let arr =[]
     arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness }))
     console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness })))
@@ -193,18 +190,7 @@ function antAlgorithm() {
     // }
 }
 
-// function sumArray(array) {
-//     let summa = 0;
-//     for(let i = 0; i < array.length; i++) {
-//         summa += array[i].probability;
-//     }
-//     return summa;
-// }
-
-// function stop() {
-//     points
-// }
-
+//тоже бесполезно но на всякий
 function outputMinIndex(ways) {
     let min = 9999999;
     let index;
@@ -217,6 +203,7 @@ function outputMinIndex(ways) {
     return index;
 }
 
+//бесползено но удалять не буду на всякий
 function countRepeat(ways) {
     let repeat = 0;
     let min = 999999;
@@ -233,10 +220,12 @@ function countRepeat(ways) {
     return repeat;
 }
 
+//меняем кол-во феромонов
 function changePheromone(ways) {
     let Q = 70; //константа для расстояния
     let p = 0.64; //коэф испарения
     let i = 0;
+    //испарение
     while (i < points.length) {
         for(let j = 0; j < points[i].pher.length; j++) {
             let tmp = points[i].pher[j] * p;
@@ -244,6 +233,7 @@ function changePheromone(ways) {
         }
         i++;
     }
+    //добавление на пути где ходили муравьишки
     for(let i = 0; i < ways.length; i++) {
         let pheromone = Q / ways[i].dist;
         for(let j = 0; j < ways[i].way.length - 1; j++) {
@@ -262,10 +252,6 @@ function choicePoint(probability) {
     for(let i = 0; i < probability.length; i++) {
         check += probability[i].probability;
         if(check >= random) {
-            // console.log("rand");
-            // console.log(random);
-            // console.log("check");
-            // console.log(check);
             return probability[i].index -  1;
         }
     }
@@ -286,8 +272,6 @@ function probabilityPoints(way, start) {
     for(let i = 0; i < array.length; i++) {
         array[i].probability = array[i].probability / sumProbability;
     }
-    // console.log(sumProbability);
-    // console.log(tmp);
     return array;
 }
 
@@ -332,152 +316,3 @@ function distance(way) {
     }
     return resultDistance;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let points = [];
-// var antCount = 10;
-// function antAlgorithm() {
-//     //da hui ego znaet
-//     //заполняем массив точек класса point
-//     let temp = [];
-//     let ways = [];
-//     let dist = [];
-//     for(let i = 0; i < circles.length; i++) {
-//         temp.push(0.200);
-//     }
-//     for(let i = 0; i < circles.length; i++) {
-//         let temp1 = distanceTwo(circles[i]);
-//         let point = new Point(circles[i].id, circles[i].x, circles[i].y, temp, temp1);
-//         points.push(point);
-//     }
-//     ///////////////////начало алгоритма
-//     let tri = 0;
-//     while(tri < 1) {
-//         let last = 0;
-//         for(let i = 0; i < antCount; i++) {
-//             let way = [];
-//             let k = last;
-//             while(way.length != circles.length) {
-//                 if(k == circles.length) {
-//                     k = 0;
-//                 }
-
-//             }
-//             last = way[way.length - 1].id;
-//             dist.push(distanceWay(way));
-//             ways.push(way);    
-//             console.log(ways);
-//             console.log(dist);
-//         }
-//         tri++;
-//     }
-
-// }
-
-// //вычисление вероятности пропорц. длине пути и кол-ву феромонов дороги до точки
-// function probabilityChoice(start, way) {
-//     let array = [];
-//     let sumProbability = 0;
-//     for(let i = 0; i < points.length; i++) {
-//         temp = points[start].pher[i] * points[start].dist[i];
-//         if(way.includes(points[i]) || start == i) {
-//             continue;
-//         }
-//         sumProbability += temp;
-//         array.push(temp);
-//     }
-//     array.forEach(function(item) {
-//         item /= sumProbability;
-//     })
-//     return array;
-// }
-
-// //добавление феромона
-// function fillingPheromone() {
-// }
-
-// function fillingWay(start) {
-//     let way = [];
-//     while(way.length != circles.length) {
-//         let probability = probabilityChoice(start, way);
-//         let choice = choicePoint(probability);
-//         way.push(points[choice])
-//     }
-// }
-
-// //констнанта деленная на длину до точки (близость) 
-// function distanceTwo(point1) {
-//     let distance = [];
-//     for(let i = 0; i < circles.length; i++) {
-//         xDist = Math.abs(point1.x - circles[i].x);
-//         yDist = Math.abs(point1.y - circles[i].y);
-//         distance.push(200/(Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))));
-//     }
-//     return distance;
-// }
- 
-// //длина пути
-// function distanceWay(way) {
-//     let resultDistance = 0;
-//     //расстояние от точки до точки
-//     for (let i = 0; i < way.length - 1; i++) { 
-//         let xDist;
-//         let yDist;
-//         let Dist;
-//         xDist = Math.abs(way[i].x - way[i + 1].x);
-//         yDist = Math.abs(way[i].y - way[i + 1].y);
-//         Dist = Math.sqrt((Math.pow(xDist, 2)) + (Math.pow(yDist, 2)));
-//         resultDistance += Dist;
-//     }
-//     return resultDistance;
-// }
-// //рандом
-// function getRandomArbitrary(min, max) {
-//     return Math.random() * (max - min) + min;
-// }
-
-// function choicePoint(probability) {
-//     let random = getRandomArbitrary(0, sumArray(probability));
-//     let summ = 0;
-//     for(let i = 0; i < probability.length; i++) {
-//         summ += probability[i];
-//         if(summ >= random) {
-//             return i;
-//         }
-//     }
-// }
-
-// function sumArray(array) {
-//     let summ=0;
-//     for(let i = 0; i < array.length; i++) {
-//         summ+=array[i];
-//     }
-//     return summ;
-// }
