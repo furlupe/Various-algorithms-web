@@ -21,6 +21,7 @@
                 <select id="clusteringTypeBox" onchange="SwitchClustering()">
                     <option value="kmeans" selected>K-Means++</option>
                     <option value="meanshift">MeanShift</option>
+                    <option value="dbscan">DBSCAN</option>
                 </select>
             </label> </br>
 
@@ -29,7 +30,7 @@
                     <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
                 </label> </br>
     
-                <label>Расстояние: 
+                <label id="distances">Расстояние: 
                     <select id="distanceBox">
                         <option value="Euclidian" selected>Евклидово</option>
                         <option value="Manchattan">Манхэттенское</option>
@@ -39,9 +40,15 @@
     
                 <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
             </div>
-            
+
+            <div id="eps">
+                <label> Выберите значение для eps:
+                    <input id="labEps" type="number" autofocus step="5" min="5" max="100" value="5">
+                </label>
+            </div>
+
             <button id="clustButton" type="button">Кластеризация</button>
-            <button id="clearButton" type="button">Очистить поле</button>
+            <button id="clearButton" type="button" onclick="ButtonClearCanvas()">Очистить поле</button>
         </div>
     </body>
     <script src="clustering.js"></script>
