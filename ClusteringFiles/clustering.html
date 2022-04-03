@@ -16,22 +16,32 @@
             Sorry bro, no canvas for you :(
             </canvas>
         </div>
-        <div class="controls">
-            <label>Выберите количество кластеров:
-                <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
-            </label> </br>
-
-            <label>Расстояние: 
-                <select id="distanceBox">
-                    <option value="Euclidian" selected>Евклидово</option>
-                    <option value="Manchattan">Манхэттенское</option>
-                    <option value="Chebichev">Чебышева</option>
+        <div id="controls">
+            <label>Метод кластеризации: 
+                <select id="clusteringTypeBox" onchange="SwitchClustering()">
+                    <option value="kmeans" selected>K-Means++</option>
+                    <option value="meanshift">MeanShift</option>
                 </select>
             </label> </br>
 
-            <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
-            <button id="clustButton" type="button" onclick="ButtonClusterize()">Кластеризация</button>
-            <button id="clearButton" type="button" onclick="ButtonClearCanvas()">Очистить поле</button>
+            <div id="kmeans_options">
+                <label>Выберите количество кластеров:
+                    <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
+                </label> </br>
+    
+                <label>Расстояние: 
+                    <select id="distanceBox">
+                        <option value="Euclidian" selected>Евклидово</option>
+                        <option value="Manchattan">Манхэттенское</option>
+                        <option value="Chebichev">Чебышева</option>
+                    </select>
+                </label> </br>
+    
+                <input type="checkbox" id="areasCheckbox" value="1"> Рисовать области </input>
+            </div>
+            
+            <button id="clustButton" type="button">Кластеризация</button>
+            <button id="clearButton" type="button">Очистить поле</button>
         </div>
     </body>
     <script src="clustering.js"></script>
