@@ -67,7 +67,7 @@ Clustering.prototype.DrawClusters = function(cluster, color){
         this.ctx.arc(cluster.dots[i].x, cluster.dots[i].y, this.size, 0, Math.PI*2);
         this.ctx.fill();
     }
-    if (document.getElementById("clusteringTypeBox") != "dbscan"){
+    if (document.getElementById("clusteringTypeBox").value != "dbscan"){
         this.ctx.beginPath();
         this.ctx.moveTo(cluster.center.x - this.size, cluster.center.y - this.size);
         this.ctx.lineTo(cluster.center.x + this.size, cluster.center.y + this.size);
@@ -106,7 +106,6 @@ Clustering.prototype.ClearCanvas = function(){
     cnt.max = 1;
     cnt.value = 1;
     count = 0;
-
     eps.value = 5;
     this.ctx.clearRect(0, 0, this.width, this.height);
 }
