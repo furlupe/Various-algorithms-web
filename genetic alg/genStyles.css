@@ -1,5 +1,5 @@
 html{
-    background: url(./img/ayaka.jpg) no-repeat;
+    background: url(./genImg/ayaka.jpg) no-repeat;
     background-size: cover;
     /* background-size: auto; */
     background-color: rgb(95,134,199);
@@ -9,7 +9,7 @@ html{
     box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     border-radius: 12px;
     background-size: 60%;
-    background: url(./img/krio-removebg-preview.png) center no-repeat;
+    background: url(./genImg/krio-removebg-preview.png) center no-repeat;
     background-color: rgb(114, 177, 250);
 }
 #Result{
@@ -25,7 +25,7 @@ html{
     font-family: "Genshin Impact";
     border-radius: 12px;
     box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
-    background: url(./img/krio-removebg-preview.png) center no-repeat;
+    background: url(./genImg/krio-removebg-preview.png) center no-repeat;
     background-size: 12%;
     background-position: 5px;   
     background-color: rgb(114, 177, 250);
@@ -76,7 +76,7 @@ h1{
 }
 @font-face {
     font-family: "Genshin Impact"; 
-    src: url("./font/Genshin_Impact.ttf") format("truetype"); 
+    src: url("./genFont/Genshin_Impact.ttf") format("truetype"); 
     font-style: normal; 
     font-weight: normal; 
 } 
