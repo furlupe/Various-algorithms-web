@@ -985,6 +985,7 @@ function show() {
 
         let label = document.createElement("label");
         label.id = "answer"
+        label.style = "font-size: 150px"
         label.innerHTML = ind;
         document.getElementById("main").appendChild(label);
     }
