@@ -21,3 +21,230 @@ td[data-mode = "path"] {
 td[data-mode = "checking"] {
     background-color: aquamarine;
 }
+
+button {
+    position: absolute;
+}
+
+#acceptChangesButton {
+    width: 550px;
+    height: 50px;
+}
+
+table {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+}
+
+input {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    text-align: center;
+    font-size: 80px;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#primmButton {
+    position: absolute;
+    width: 700px;
+    height: 50px;
+}
+
+.arrow {
+    cursor: pointer;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-top: 10px solid #CFB694;
+    border-right: 10px solid #CFB694;
+    margin-right: 60px;
+}
+
+.arrow::before {
+    content: "";
+    cursor: pointer;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-top: 10px solid #EAD5B6;
+    border-right: 10px solid #EAD5B6;
+    margin-top: 5px;
+    margin-left: 25px;
+}
+
+.arrow-increase {
+    transform: rotate(-45deg);
+    animation: arrowIncDef 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-increase:hover {
+    animation: arrowIncHover 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-decrease {
+    transform: rotate(135deg);
+    animation: arrowDecDef 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-decrease:hover {
+    animation: arrowDecHover 125ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes arrowIncHover {
+    from {
+        transform: scale(1.0) rotate(-45deg);
+    }
+    10% {
+        transform: scale(1.02) rotate(-45deg);
+    }
+    20% {
+        transform: scale(1.04) rotate(-45deg);
+    }
+    30% {
+        transform: scale(1.06) rotate(-45deg);
+    }
+    40% {
+        transform: scale(1.08) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-45deg);
+    }
+    60% {
+        transform: scale(1.12) rotate(-45deg);
+    }
+    70% {
+        transform: scale(1.14) rotate(-45deg);
+    }
+    80% {
+        transform: scale(1.16) rotate(-45deg);
+    }
+    90% {
+        transform: scale(1.18) rotate(-45deg);
+    }
+    to {
+        transform: scale(1.2) rotate(-45deg);
+    }
+
+}
+@keyframes arrowIncDef {
+    from {
+        transform: scale(1.2) rotate(-45deg);
+    }
+    10% {
+        transform: scale(1.18) rotate(-45deg);
+    }
+    20% {
+        transform: scale(1.16) rotate(-45deg);
+    }
+    30% {
+        transform: scale(1.14) rotate(-45deg);
+    }
+    40% {
+        transform: scale(1.12) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-45deg);
+    }
+    60% {
+        transform: scale(1.08) rotate(-45deg);
+    }
+    70% {
+        transform: scale(1.06) rotate(-45deg);
+    }
+    80% {
+        transform: scale(1.04) rotate(-45deg);
+    }
+    90% {
+        transform: scale(1.02) rotate(-45deg);
+    }
+    to {
+        transform: scale(1.0) rotate(-45deg);
+    }
+}
+
+@keyframes arrowDecHover {
+    from {
+        transform: scale(1.0) rotate(135deg);
+    }
+    10% {
+        transform: scale(1.02) rotate(135deg);
+    }
+    20% {
+        transform: scale(1.04) rotate(135deg);
+    }
+    30% {
+        transform: scale(1.06) rotate(135deg);
+    }
+    40% {
+        transform: scale(1.08) rotate(135deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(135deg);
+    }
+    60% {
+        transform: scale(1.12) rotate(135deg);
+    }
+    70% {
+        transform: scale(1.14) rotate(135deg);
+    }
+    80% {
+        transform: scale(1.16) rotate(135deg);
+    }
+    90% {
+        transform: scale(1.18) rotate(135deg);
+    }
+    to {
+        transform: scale(1.2) rotate(135deg);
+    }
+
+}
+@keyframes arrowDecDef {
+    from {
+        transform: scale(1.2) rotate(135deg);
+    }
+    10% {
+        transform: scale(1.18) rotate(135deg);
+    }
+    20% {
+        transform: scale(1.16) rotate(135deg);
+    }
+    30% {
+        transform: scale(1.14) rotate(135deg);
+    }
+    40% {
+        transform: scale(1.12) rotate(135deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(135deg);
+    }
+    60% {
+        transform: scale(1.08) rotate(135deg);
+    }
+    70% {
+        transform: scale(1.06) rotate(135deg);
+    }
+    80% {
+        transform: scale(1.04) rotate(135deg);
+    }
+    90% {
+        transform: scale(1.02) rotate(135deg);
+    }
+    to {
+        transform: scale(1.0) rotate(135deg);
+    }
+}

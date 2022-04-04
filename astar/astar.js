@@ -1,8 +1,40 @@
 const matrix = new Array();
+
+const table_width = 700,
+        table_height = 700;
+
+const input_height = 250,
+        input_width = 250;
+
 document.getElementById("acceptChangesButton").style.display = 'none';
 document.getElementById("makeChangesButton").style.display = 'none';
 document.getElementById("pathSearchButton").style.display = 'none';
 document.getElementById("pathChangeButton").style.display = 'none';
+
+// положение для инпута
+let s = document.getElementById("labSize");
+s.style.top = (window.innerHeight - input_height) / 2 + "px";
+s.style.left = (window.innerWidth - table_width) / 4 - input_width / 2 + "px";
+
+// положение для кнопки генерации лабиринта
+let pb = document.getElementById("primmButton");
+pb.style.top = (window.innerHeight + table_height - 60) / 2 + "px";
+pb.style.left = (window.innerWidth - table_width) / 2 + "px";
+
+// положение для стрелки увеличения инпута
+let inc = document.getElementById("increase");
+inc.style.left = (window.innerWidth - table_width) / 4 - 40 + "px";
+inc.style.top = (window.innerHeight - input_height) / 2 - 80 + "px";
+
+// положение для стрелки уменьшения инпута
+let dec = document.getElementById("decrease");
+dec.style.left = (window.innerWidth - table_width) / 4 - 40 + "px";
+dec.style.top = (window.innerHeight + input_height) / 2 + "px";
+
+// положение для "принять изменения"
+let acp = document.getElementById("acceptChangesButton");
+acp.style.left = (window.innerWidth + table_height + 60) / 2 + "px";
+acp.style.top = (window.innerHeight - table_height) / 2 - 50 + "px";
 
 // класс узла для А*
 class Node {
@@ -26,6 +58,7 @@ function sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
+// возвращает, находится ли точка внутри поля
 function isInside(x, y, size) {
     return (x >= 0 && y >= 0 && x < size && y < size);
 }
@@ -229,8 +262,15 @@ function createTable(){
     table.id = 'lab';
     table.border = 1;
 
+    let left = (window.innerWidth - table_width) / 2;
+    let top = (window.innerHeight - table_height) / 2;
+
+    table.style.left = left + "px";
+    table.style.top = top - 50 + "px";
+
     var r, cell; // переменные для рядов и ячеек
-    var size = document.getElementById('labSize').value, maxSize = document.getElementById("labSize").max; // размерность таблицы
+    var size = document.getElementById('labSize').value,
+        maxSize = document.getElementById("labSize").max; // размерность таблицы
 
     if (size < 2) size = 2;
 
@@ -398,3 +438,17 @@ async function aStar(){
         }
     }
 }
+
+// увеличить значени в поле инпута
+function increaseInput() {
+    document.getElementById("labSize").value++;
+    document.getElementById("labSize").onchange.call();
+}
+
+// уменьшить значение в поле инпута
+function decreaseInput() {
+    document.getElementById("labSize").value--;
+    document.getElementById("labSize").onchange.call();
+}
+
+createTable();
