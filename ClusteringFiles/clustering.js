@@ -1,6 +1,5 @@
-/**************************** Общее *****************************/
-//Кластеризация
-function Clustering(canvas){
+/**************************** K_Means++ *****************************/
+function K_Means(canvas){
     this.canvas = canvas;
     this.ctx=canvas.getContext('2d');
     this.dots = [];
@@ -8,30 +7,25 @@ function Clustering(canvas){
     this.height = canvas.height;
     this.width = canvas.width;
     this.size = 5; //размер точек и центроидов
-
-    this.radius = 50; //радиус для meanshift
-
-    this.minPts = 3; //минимальное количество точек для кластера DBSCAN
-    this.visited = [];
 }
 //Добавление точки в массив
-Clustering.prototype.AddDot = function(x, y){
+K_Means.prototype.AddDot = function(x, y){
     this.dots.push({x:x,y:y});
     this.ClearClusters();
 }
 //Добавления центроида в массив (кластер)
-Clustering.prototype.AddCenter = function(x, y){
+K_Means.prototype.AddCenter = function(x, y){
     this.ClearClusters();
     this.clusters.push({center:{x:x,y:y}, dots:[]});
 }
 //Очистка кластера
-Clustering.prototype.ClearClusters = function(){
+K_Means.prototype.ClearClusters = function(){
     for (let i = 0; i < this.clusters.length; i++){
         this.clusters[i].dots.length = 0;
     }
 }
 //Расстояние (разные метрики)
-Clustering.prototype.Distance = function(dot, center, distType){
+K_Means.prototype.Distance = function(dot, center, distType){
     if (distType == "Euclidian")
         return Math.sqrt((center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y));
     if (distType == "Manchattan")
@@ -39,80 +33,8 @@ Clustering.prototype.Distance = function(dot, center, distType){
     if (distType == "Chebichev")
         return Math.max(Math.abs(center.x-dot.x),Math.abs(center.y-dot.y));
 }
-//Рисуем области
-Clustering.prototype.DrawAreas = function(distType){
-    if (this.clusters.length < 2){
-        let part = 17;
-        this.ctx.fillStyle = 'hsl('+part+', 80%, 90%)';
-        this.ctx.fillRect(0, 0, this.height, this.width);
-    }
-    else{
-        for (let h = 0; h < this.height; h++){
-            for (let w = 0; w < this.width; w++){
-                let currPiece = {x: h, y: w};
-                let index = this.GetClusterIndex(currPiece, distType);
-                let part = index*17;
-                this.ctx.fillStyle = 'hsl('+part+', 80%, 90%)';
-                this.ctx.fillRect(h, w, 1, 1);
-            }
-        }
-    }
-}
-//Рисуем кластеры
-Clustering.prototype.DrawClusters = function(cluster, color){
-    this.ctx.fillStyle = this.ctx.strokeStyle = color;
-    this.ctx.lineWidth = 2;
-    for(let i = 0; i < cluster.dots.length; i++){
-        this.ctx.beginPath();
-        this.ctx.arc(cluster.dots[i].x, cluster.dots[i].y, this.size, 0, Math.PI*2);
-        this.ctx.fill();
-    }
-    if (document.getElementById("clusteringTypeBox").value != "dbscan"){
-        this.ctx.beginPath();
-        this.ctx.moveTo(cluster.center.x - this.size, cluster.center.y - this.size);
-        this.ctx.lineTo(cluster.center.x + this.size, cluster.center.y + this.size);
-        this.ctx.moveTo(cluster.center.x - this.size, cluster.center.y + this.size);
-        this.ctx.lineTo(cluster.center.x + this.size, cluster.center.y - this.size);
-        this.ctx.stroke();
-    }
-}
-//Рисуем точки
-Clustering.prototype.DrawDots = function(){
-    for (let i = 0; i < this.dots.length; i++){
-        this.ctx.beginPath();
-        this.ctx.arc(this.dots[i].x, this.dots[i].y, this.size, 0, Math.PI * 2);
-        this.ctx.fillStyle = ctx.strokeStyle = 'black';
-        ctx.fill();
-    }
-}
-//Рисуем все вместе
-Clustering.prototype.Draw = function(distType, drawAreas = null){
-    this.ctx.fillStyle='#eee';
-    this.ctx.fillRect(0, 0, this.width, this.height);
-    if (drawAreas != null){
-        this.DrawAreas(distType);
-    }
-    this.DrawDots();
-    for(let i = 0; i < this.clusters.length; i++){
-        let part = i*17;
-        let color='hsl('+part+', 80%, 50%)';
-        this.DrawClusters(this.clusters[i], color);
-    }
-}
-//Очистка поля
-Clustering.prototype.ClearCanvas = function(){
-    this.clusters.length = 0;
-    this.dots.length = 0;
-    cnt.max = 1;
-    cnt.value = 1;
-    count = 0;
-    eps.value = 5;
-    this.ctx.clearRect(0, 0, this.width, this.height);
-}
-
-/**************************** K_Means++ *****************************/
 //K-Means++: поиск индекса кластера для точки
-Clustering.prototype.GetClusterIndex = function(dot, distType){
+K_Means.prototype.GetClusterIndex = function(dot, distType){
     let minIndex = 0;
     let minDist = this.Distance(dot, this.clusters[0].center, distType);
     for (let i = 1; i < this.clusters.length; i++){
@@ -125,7 +47,7 @@ Clustering.prototype.GetClusterIndex = function(dot, distType){
     return minIndex;
 }
 //K-Means++: проверка на смену центроида для кластера
-Clustering.prototype.IsChangedCentroids = function(){
+K_Means.prototype.IsChangedCentroids = function(){
     let isChanged = false;
     for (let i = 0; i < this.clusters.length; i++){
         if (this.clusters[i].dots.length == 0){
@@ -152,8 +74,44 @@ Clustering.prototype.IsChangedCentroids = function(){
     }
     return isChanged;
 }
+//Рисуем кластеры
+K_Means.prototype.DrawClusters = function(cluster, color){
+    this.ctx.fillStyle = this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = 2;
+    for(let i = 0; i < cluster.dots.length; i++){
+        this.ctx.beginPath();
+        this.ctx.arc(cluster.dots[i].x, cluster.dots[i].y, this.size, 0, Math.PI*2);
+        this.ctx.fill();
+    }
+    this.ctx.beginPath();
+    this.ctx.moveTo(cluster.center.x - this.size, cluster.center.y - this.size);
+    this.ctx.lineTo(cluster.center.x + this.size, cluster.center.y + this.size);
+    this.ctx.moveTo(cluster.center.x - this.size, cluster.center.y + this.size);
+    this.ctx.lineTo(cluster.center.x + this.size, cluster.center.y - this.size);
+    this.ctx.stroke();
+}
+//Рисуем точки
+K_Means.prototype.DrawDots = function(){
+    for (let i = 0; i < this.dots.length; i++){
+        this.ctx.beginPath();
+        this.ctx.arc(this.dots[i].x, this.dots[i].y, this.size, 0, Math.PI * 2);
+        this.ctx.fillStyle = ctx.strokeStyle = 'black';
+        ctx.fill();
+    }
+}
+//Рисуем
+K_Means.prototype.Draw = function(){
+    this.ctx.fillStyle='#eee';
+    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.DrawDots();
+    for(let i = 0; i < this.clusters.length; i++){
+        let part = i*23;
+        let color='hsl('+part+', 80%, 50%)';
+        this.DrawClusters(this.clusters[i], color);
+    }
+}
 //K-Means++: инициализация центров
-Clustering.prototype.InitCenters = function(cnt, distType){
+K_Means.prototype.InitCenters = function(cnt, distType){
     this.ClearClusters();
     this.clusters.length = 0;
     let idx = Math.floor(Math.random()*this.dots.length);
@@ -189,8 +147,8 @@ Clustering.prototype.InitCenters = function(cnt, distType){
     }
 }
 //K-Means++: кластеризация
-Clustering.prototype.KMeansClusterize = function(cnt, distType){
-    this.InitCenters(cnt, distType);
+K_Means.prototype.Clusterize = function(cnt, distType){
+    kmeans.InitCenters(cnt, distType);
     do{
         this.ClearClusters();
         for(let i = 0; i < this.dots.length; i++){
@@ -201,10 +159,90 @@ Clustering.prototype.KMeansClusterize = function(cnt, distType){
     }
     while(this.IsChangedCentroids());
 }
+K_Means.prototype.ClearCanvas = function(){
+    this.clusters.length = 0;
+    this.dots.length = 0;
+    cnt.max = 1;
+    cnt.value = 1;
+    count = 0;
+    this.ctx.clearRect(0, 0, this.width, this.height);
+}
 
 /**************************** MeanShift *****************************/
+function MeanShift(canvas2){
+    this.canvas2 = canvas2;
+    this.ctx2=canvas2.getContext('2d');
+    this.dots = [];
+    this.clusters = [];
+    this.height = canvas.height;
+    this.width = canvas.width;
+    this.size = 5; //размер точек и центроидов
+    this.radius = 50; //радиус области
+}
+//Добавление точки в массив
+MeanShift.prototype.AddDot = function(x, y){
+    this.dots.push({x:x,y:y});
+    this.ClearClusters();
+}
+//Добавления центроида в массив (кластер)
+MeanShift.prototype.AddCenter = function(x, y){
+    this.ClearClusters();
+    this.clusters.push({center:{x:x,y:y}, dots:[]});
+}
+//Очистка кластера
+MeanShift.prototype.ClearClusters = function(){
+    for (let i = 0; i < this.clusters.length; i++){
+        this.clusters[i].dots.length = 0;
+    }
+}
+//Расстояние (разные метрики)
+MeanShift.prototype.Distance = function(dot, center, distType){
+    if (distType == "Euclidian")
+        return Math.sqrt((center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y));
+    if (distType == "Manchattan")
+        return Math.abs(center.x-dot.x) + Math.abs(center.y-dot.y);
+    if (distType == "Chebichev")
+        return Math.max(Math.abs(center.x-dot.x),Math.abs(center.y-dot.y));
+}
+//Рисуем кластеры
+MeanShift.prototype.DrawClusters = function(cluster, color){
+    this.ctx2.fillStyle = this.ctx2.strokeStyle = color;
+    this.ctx2.lineWidth = 2;
+    for(let i = 0; i < cluster.dots.length; i++){
+        this.ctx2.beginPath();
+        this.ctx2.arc(cluster.dots[i].x, cluster.dots[i].y, this.size, 0, Math.PI*2);
+        this.ctx2.fill();
+    }
+    this.ctx2.beginPath();
+    this.ctx2.moveTo(cluster.center.x - this.size, cluster.center.y - this.size);
+    this.ctx2.lineTo(cluster.center.x + this.size, cluster.center.y + this.size);
+    this.ctx2.moveTo(cluster.center.x - this.size, cluster.center.y + this.size);
+    this.ctx2.lineTo(cluster.center.x + this.size, cluster.center.y - this.size);
+    this.ctx2.stroke();
+}
+//Рисуем точки
+MeanShift.prototype.DrawDots = function(){
+    for (let i = 0; i < this.dots.length; i++){
+        this.ctx2.beginPath();
+        this.ctx2.arc(this.dots[i].x, this.dots[i].y, this.size, 0, Math.PI * 2);
+        this.ctx2.fillStyle = ctx2.strokeStyle = 'black';
+        ctx2.fill();
+    }
+}
+//Рисуем
+MeanShift.prototype.Draw = function(){
+    this.ctx2.fillStyle='#eee';
+    this.ctx2.fillRect(0, 0, this.width, this.height);
+    this.DrawDots();
+    for(let i = 0; i < this.clusters.length; i++){
+        console.log(this.clusters[i]);
+        let part = i*23;
+        let color='hsl('+part+', 80%, 50%)';
+        this.DrawClusters(this.clusters[i], color);
+    }
+}
 //MeanShift: найти новый центр (для сдвига)
-Clustering.prototype.GetNewCenter = function(arr){
+MeanShift.prototype.GetNewCenter = function(arr){
     let x = 0;
     let y = 0;
     for (let i = 0; i < arr.length; i++){
@@ -217,7 +255,7 @@ Clustering.prototype.GetNewCenter = function(arr){
     return {x: x, y: y};
 }
 //MeanShift: проверка расположения в границах окна
-Clustering.prototype.IsInBounds = function(center, dot){
+MeanShift.prototype.IsInBounds = function(center, dot){
     let dist = this.Distance(dot, center, "Euclidian");
     if (dist <= this.radius){
         return true;
@@ -227,7 +265,7 @@ Clustering.prototype.IsInBounds = function(center, dot){
     }
 }
 //MeanShift: проверка, есть ли уже в области существующего центра
-Clustering.prototype.IsInClusters = function(center){
+MeanShift.prototype.IsInClusters = function(center){
     for (let i = 0; i < this.clusters.length; i++){
         if (this.IsInBounds(this.clusters[i].center, center)){
             return i;
@@ -236,7 +274,8 @@ Clustering.prototype.IsInClusters = function(center){
     return -1;
 }
 //MeanSift: кластеризация
-Clustering.prototype.MeanShiftClusterize = function(){
+MeanShift.prototype.Clusterize = function(){
+    this.clusters.length = 0;
     let currCenters = [];
     for (let i = 0; i < this.dots.length; i++){
         let tmpCenter = this.dots[i];
@@ -261,6 +300,7 @@ Clustering.prototype.MeanShiftClusterize = function(){
     }
 
     currCenters.sort((a, b) => b.cnt - a.cnt);
+    this.clusters.push({center:{x:currCenters[0].cent.x,y:currCenters[0].cent.y}, dots:[]});
     for (let i = 0; i < currCenters.length; i++){
         let res = this.IsInClusters(currCenters[i].cent);
         
@@ -273,10 +313,85 @@ Clustering.prototype.MeanShiftClusterize = function(){
         }
     }
 }
+//Очистка поля
+MeanShift.prototype.ClearCanvas = function(){
+    this.clusters.length = 0;
+    this.dots.length = 0;
+    cnt.max = 1;
+    cnt.value = 1;
+    count = 0;
+    this.ctx2.clearRect(0, 0, this.width, this.height);
+}
 
 /**************************** DBSCAN *****************************/
+function DBSCAN(canvas){
+    this.canvas3 = canvas3;
+    this.ctx3=canvas3.getContext('2d');
+    this.dots = [];
+    this.clusters = [];
+    this.height = canvas.height;
+    this.width = canvas.width;
+    this.size = 5; //размер точек и центроидов
+
+    this.minPts = 3;
+    this.visited = [];
+}
+//Добавление точки в массив
+DBSCAN.prototype.AddDot = function(x, y){
+    this.dots.push({x:x,y:y});
+    this.ClearClusters();
+}
+//Добавления центроида в кластеры
+DBSCAN.prototype.AddCenter = function(x, y){
+    this.clusters.push({center:{x:x,y:y}, dots:[]});
+}
+//Очистка кластера
+DBSCAN.prototype.ClearClusters = function(){
+    for (let i = 0; i < this.clusters.length; i++){
+        this.clusters[i].dots.length = 0;
+    }
+}
+//Hасстояние (разные метрики)
+DBSCAN.prototype.Distance = function(dot, center, distType){
+    if (distType == "Euclidian")
+        return Math.sqrt((center.x-dot.x)*(center.x-dot.x)+(center.y-dot.y)*(center.y-dot.y));
+    if (distType == "Manchattan")
+        return Math.abs(center.x-dot.x) + Math.abs(center.y-dot.y);
+    if (distType == "Chebichev")
+        return Math.max(Math.abs(center.x-dot.x),Math.abs(center.y-dot.y));
+}
+//Рисуем кластеры
+DBSCAN.prototype.DrawClusters = function(cluster, color){
+    this.ctx3.fillStyle = this.ctx3.strokeStyle = color;
+    this.ctx3.lineWidth = 2;
+    for(let i = 0; i < cluster.dots.length; i++){
+        this.ctx3.beginPath();
+        this.ctx3.arc(cluster.dots[i].x, cluster.dots[i].y, this.size, 0, Math.PI*2);
+        this.ctx3.fill();
+    }
+}
+//Рисуем точки
+DBSCAN.prototype.DrawDots = function(){
+    for (let i = 0; i < this.dots.length; i++){
+        this.ctx3.beginPath();
+        this.ctx3.arc(this.dots[i].x, this.dots[i].y, this.size, 0, Math.PI * 2);
+        this.ctx3.fillStyle = ctx3.strokeStyle = 'black';
+        ctx3.fill();
+    }
+}
+//Рисуем
+DBSCAN.prototype.Draw = function(){
+    this.ctx3.fillStyle='#eee';
+    this.ctx3.fillRect(0, 0, this.width, this.height);
+    this.DrawDots();
+    for(let i = 0; i < this.clusters.length; i++){
+        let part = i*23;
+        let color='hsl('+part+', 80%, 50%)';
+        this.DrawClusters(this.clusters[i], color);
+    }
+}
 //DBSCAN: поиск соседей
-Clustering.prototype.GetNeighbors = function(distType, dot, eps){
+DBSCAN.prototype.GetNeighbors = function(distType, dot, eps){
     let neighbors = [];
     for (let i = 0; i < this.dots.length; i++){
         if (this.Distance(this.dots[i], dot, distType) <= eps){
@@ -287,7 +402,9 @@ Clustering.prototype.GetNeighbors = function(distType, dot, eps){
     return neighbors; //массив индексов соседей
 }
 //DBSCAN: кластеризация
-Clustering.prototype.DBSCANClusterize = function(distType, eps){
+DBSCAN.prototype.Clusterize = function(distType, eps){
+    this.clusters.length = 0;
+    this.ClearClusters();
     let visited = [];
     for (let i = 0; i < this.dots.length; i++){
         if (visited[i] !== undefined){
@@ -324,86 +441,71 @@ Clustering.prototype.DBSCANClusterize = function(distType, eps){
             }
         }
     }
+
+    console.log(this.clusters.length);
+}
+//Очистка поля
+DBSCAN.prototype.ClearCanvas = function(){
+    this.clusters.length = 0;
+    this.dots.length = 0;
+    cnt.max = 1;
+    cnt.value = 1;
+    count = 0;
+    this.ctx3.clearRect(0, 0, this.width, this.height);
 }
 
 let canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext('2d');
+let canvas2 = document.getElementById("myCanvas2");
+var ctx2 = canvas2.getContext('2d');
+let canvas3 = document.getElementById("myCanvas3");
+var ctx3 = canvas3.getContext('2d');
+
 var distType = document.getElementById("distanceBox");
 var drawAreas = document.getElementById("areasCheckbox");
 var cnt = document.getElementById("labCount");
 var eps = document.getElementById("labEps");
 var count = 0;
-let clustering = new Clustering(canvas);
 
-clustering.Draw(distType.value);
+let kmeans = new K_Means(canvas);
+let meanshift = new MeanShift(canvas2);
+let dbscan = new DBSCAN(canvas3);
+
+kmeans.Draw();
+meanshift.Draw();
+dbscan.Draw();
 canvas.addEventListener("click", e => {
     var mouse = {x: null, y: null}; //позиция курсора
     mouse.x = e.offsetX; //координаты
     mouse.y = e.offsetY; //клика мыши
 
-    clustering.AddDot(mouse.x, mouse.y);
-    count++;
+    kmeans.AddDot(mouse.x, mouse.y);
+    meanshift.AddDot(mouse.x, mouse.y);
+    dbscan.AddDot(mouse.x, mouse.y);
 
-    clustering.Draw(distType.value);
+    count++;
     cnt.max=count;
+
+    kmeans.Draw();
+    meanshift.Draw();
+    dbscan.Draw();
 });
 
-//K-Means: кнопка кластеризации
-document.getElementById("clustButton").onclick = function ButtonKMeansClusterize(){
-    clustering.KMeansClusterize(cnt.value, distType.value);
-    if (drawAreas.checked){
-        clustering.Draw(distType.value, drawAreas);
-    }
-    else{
-        clustering.Draw(distType.value);
-    }
-}
-
 /**************************** Buttons *****************************/
-document.getElementById("eps").style.display="none";
+document.getElementById("clustButton").onclick = function ButtonKMeansClusterize(){
+    kmeans.Clusterize(cnt.value, distType.value);
+    kmeans.Draw();
 
-//Смена типа кластеризации при изменении выбора
-function SwitchClustering(){
-    if (document.getElementById("clusteringTypeBox").value == "kmeans"){
-        document.getElementById("kmeans_options").style.display="block";
-        document.getElementById("eps").style.display="none";
+    meanshift.Clusterize();
+    meanshift.Draw();
 
-        //K-Means: кнопка кластеризации
-        document.getElementById("clustButton").onclick = function ButtonKMeansClusterize(){
-            clustering.KMeansClusterize(cnt.value, distType.value);
-            if (drawAreas.checked){
-                clustering.Draw(distType.value, drawAreas);
-            }
-            else{
-                clustering.Draw(distType.value);
-            }
-        };
-
-    }
-    if (document.getElementById("clusteringTypeBox").value == "meanshift"){
-        document.getElementById("kmeans_options").style.display="none";
-        document.getElementById("eps").style.display="none";
-
-        //MeanShift: кнопка кластеризации
-        document.getElementById("clustButton").onclick = function ButtonMeanShiftClusterize(){
-            clustering.MeanShiftClusterize();
-            clustering.Draw(distType.value);
-        };
-    }
-    if (document.getElementById("clusteringTypeBox").value == "dbscan"){
-        document.getElementById("kmeans_options").style.display="none";
-        document.getElementById("distances").style.display="block";
-        document.getElementById("eps").style.display="block";
-
-        //DBSCAN: кнопка кластеризации
-        document.getElementById("clustButton").onclick = function ButtonDBSCANClusterize(){
-            clustering.DBSCANClusterize(distType.value, eps.value);
-            clustering.Draw(distType.value);
-        };
-    }
+    dbscan.Clusterize(distType.value, eps.value);
+    dbscan.Draw();
 }
 
 //Кнопка очистки поля
 document.getElementById("clearButton").onclick = function ButtonClearCanvas(){
-    clustering.ClearCanvas();
+    kmeans.ClearCanvas();
+    meanshift.ClearCanvas();
+    dbscan.ClearCanvas();
 }

@@ -2,16 +2,19 @@
     text-align: center;
 }
 
-h3{
+.canvas{
     position: relative;
-}
-
-.canva{
-    position: absolute;
-    top: 10px;
-}
-
-.contrils{
     display: inline-block;
-    vertical-align: top;
+}
+
+.clsname{
+    position: absolute;
+    top: -10px;
+    left: 15px;
+}
+
+.controls{
+    position: absolute;
+    bottom: -50px;
+    left: 15px;
 }
