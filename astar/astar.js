@@ -6,36 +6,6 @@ const table_width = 700,
 const input_height = 250,
         input_width = 250;
 
-document.getElementById("acceptChangesButton").style.display = 'none';
-document.getElementById("makeChangesButton").style.display = 'none';
-document.getElementById("pathSearchButton").style.display = 'none';
-document.getElementById("pathChangeButton").style.display = 'none';
-
-// положение для инпута
-let s = document.getElementById("labSize");
-s.style.top = (window.innerHeight - input_height) / 2 + "px";
-s.style.left = (window.innerWidth - table_width) / 4 - input_width / 2 + "px";
-
-// положение для кнопки генерации лабиринта
-let pb = document.getElementById("primmButton");
-pb.style.top = (window.innerHeight + table_height - 60) / 2 + "px";
-pb.style.left = (window.innerWidth - table_width) / 2 + "px";
-
-// положение для стрелки увеличения инпута
-let inc = document.getElementById("increase");
-inc.style.left = (window.innerWidth - table_width) / 4 - 40 + "px";
-inc.style.top = (window.innerHeight - input_height) / 2 - 80 + "px";
-
-// положение для стрелки уменьшения инпута
-let dec = document.getElementById("decrease");
-dec.style.left = (window.innerWidth - table_width) / 4 - 40 + "px";
-dec.style.top = (window.innerHeight + input_height) / 2 + "px";
-
-// положение для "принять изменения"
-let acp = document.getElementById("acceptChangesButton");
-acp.style.left = (window.innerWidth + table_height + 60) / 2 + "px";
-acp.style.top = (window.innerHeight - table_height) / 2 - 50 + "px";
-
 // класс узла для А*
 class Node {
     parent = null;
@@ -207,8 +177,8 @@ function createTargets() {
             finish.y = Number(cell.dataset.x);
             finish.inUse = 1;
 
-            document.getElementById("pathSearchButton").style.display = '';
-            document.getElementById("pathChangeButton").style.display = '';
+            document.getElementById("pathSearchButton").disabled = false;
+            document.getElementById("pathChangeButton").disabled = false;
         }
     }
 }
@@ -246,8 +216,8 @@ function clearTargets() {
         }
     }
 
-    document.getElementById("pathSearchButton").style.display = 'none';
-    document.getElementById("pathChangeButton").style.display = 'none';
+    document.getElementById("pathSearchButton").disabled = true;
+    document.getElementById("pathChangeButton").disabled = true;
 }
 
 // функция создает таблицу n*n
@@ -261,12 +231,6 @@ function createTable(){
     table = document.createElement("table"); // создать новую таблицу
     table.id = 'lab';
     table.border = 1;
-
-    let left = (window.innerWidth - table_width) / 2;
-    let top = (window.innerHeight - table_height) / 2;
-
-    table.style.left = left + "px";
-    table.style.top = top - 50 + "px";
 
     var r, cell; // переменные для рядов и ячеек
     var size = document.getElementById('labSize').value,
@@ -297,7 +261,7 @@ function createTable(){
     }
 
     table.addEventListener("click", createWall)
-    document.body.appendChild(table);
+    document.getElementById("tableTheme").appendChild(table);
 
     document.getElementById("acceptChangesButton").style.display = "";
 }
@@ -312,8 +276,11 @@ function acceptChanges() {
     table.removeEventListener("click", createWall); // перестать делать стены по нажатию на ячейку
     table.addEventListener("click", createTargets); // начать ставить цели
 
-    document.getElementById("acceptChangesButton").style.display = "none"; // скрыть кнопку ПРИМЕНИТЬ
-    document.getElementById("makeChangesButton").style.display = ""; // отобразить кнопку ИЗМЕНИТЬ
+    //document.getElementById("acceptChangesButton").style.display = "none"; // скрыть кнопку ПРИМЕНИТЬ
+    //document.getElementById("makeChangesButton").style.display = ""; // отобразить кнопку ИЗМЕНИТЬ
+
+    document.getElementById("acceptChangesButton").innerHTML = "Изменить лабиринт";
+    document.getElementById("acceptChangesButton").onclick = makeChanges;
 
 }
 
@@ -328,8 +295,11 @@ function makeChanges() {
     table.removeEventListener("click", createTargets); // перестать делать цели по нажатию на ячейку
     table.addEventListener("click", createWall); // начать ставить стены
 
-    document.getElementById("acceptChangesButton").style.display = "";
-    document.getElementById("makeChangesButton").style.display = "none";
+    //document.getElementById("acceptChangesButton").style.display = "";
+    //document.getElementById("makeChangesButton").style.display = "none";
+
+    document.getElementById("acceptChangesButton").innerHTML = "Применить изменения";
+    document.getElementById("acceptChangesButton").onclick = acceptChanges;
 
     clearTargets();
 }
@@ -352,6 +322,14 @@ async function aStar(){
     }
 
     var size = document.getElementById('labSize').value; // размерность таблицы
+
+    // убрать ранее отрисованный путь, если таковой был
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            let cell = document.getElementById("lab").rows[j].cells[i];
+            cell.dataset.mode = (cell.dataset.mode == "path") ? "empty" : cell.dataset.mode;
+        }
+    }
 
     var stNode = new Node();
     stNode.x = Number(start.x);
@@ -421,7 +399,7 @@ async function aStar(){
 
     // если не был найден путь, вывести соответствующее сообщение
     if (!(current.x == finish.x && current.y == finish.y)) {
-        alert(`There is no way to get from (${start.x + 1}, ${start.y + 1}) to (${finish.x + 1}, ${finish.y + 1})`);
+        alert(`Оказывается, что пути из (${start.x + 1}, ${start.y + 1}) в (${finish.x + 1}, ${finish.y + 1}) нет\n :C`);
     } else {
         // закрасить путь
         for(;current.parent != null; current = current.parent) {

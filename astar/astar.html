@@ -6,18 +6,26 @@
     <title>Алгоритмы 6-го модуля</title>
 </head>
 <body>
-    <input id="labSize" type="number" onchange="createTable()" autofocus step="1" min="2" max="20" value="2">
+    <div id="titleTheme">
+        <p id="p-title">Алгоритм поиска пути А* (a-star)</p>
+    </div>
+    <div id="inputTheme">
+        <img src="additionFiles/geo_sign.png">
+        <div id="decrease" class="arrow arrow-decrease" onclick="decreaseInput()"></div>
+        <div id="increase" class="arrow arrow-increase" onclick="increaseInput()"></div>
+        <input id="labSize" type="number" onchange="createTable()" autofocus step="1" min="2" max="20" value="2">
+    </div>
 
-    <button id="primmButton" type="button" onclick="primmLabyrinth()">Авто-генерация лабиринта</button>
+    <div id="tableTheme">
+        <button id="primmButton" type="button" onclick="primmLabyrinth()">Авто-генерация лабиринта</button>
+    </div>
 
-    <div id="decrease" class="arrow arrow-decrease" onclick="decreaseInput()"></div>
-    <div id="increase" class="arrow arrow-increase" onclick="increaseInput()"></div>
-
-    <button id="acceptChangesButton" type="button" onclick="acceptChanges()">Применить изменения</button>
-    <button id="makeChangesButton" type="button" onclick="makeChanges()">Изменить лабиринт</button>
-
-    <button id="pathSearchButton" type="button" onclick="aStar()">Найти путь</button>
-    <button id="pathChangeButton" type="button" onclick="clearTargets()">Изменить путь</button>
+    <div id="pathbuttonsTheme">
+        <button id="acceptChangesButton" type="button" onclick="acceptChanges()">Применить изменения</button>
+        <button id="pathSearchButton" type="button" onclick="aStar()" disabled="disabled">Найти путь</button>
+        <button id="pathChangeButton" type="button" onclick="clearTargets()" disabled="disabled">Изменить путь</button>
+        <img src="additionFiles/noelle.png" />
+    </div>
 </body>
 <script src="astar.js"></script>
 </html>
