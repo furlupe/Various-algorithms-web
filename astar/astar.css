@@ -4,8 +4,13 @@
 }
 
 p{
+    position: absolute;
     font-family: Genshin;
-    font-size: 20px;
+    width: 540px;
+    font-size: 30px;
+    top: 50%;
+    margin-top: -0.625em;
+    left: 90px;
 }
 
 body {
@@ -114,7 +119,6 @@ div {
     height: 60px;
     width: 720px;
     border: 1px solid;
-    text-align: center;
 }
 
 #inputTheme {
