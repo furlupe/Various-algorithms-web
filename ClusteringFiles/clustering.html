@@ -18,7 +18,7 @@
             <label class="clsname">Метод кластеризации: K_Means++</label> </br>
 
             <div class="controls">
-                <label id="distances">Расстояние: 
+                <label id="distances">Расстояние (для всех методов): 
                     <select id="distanceBox">
                         <option value="Euclidian" selected>Евклидово</option>
                         <option value="Manchattan">Манхэттенское</option>
@@ -26,7 +26,7 @@
                     </select>
                 </label> </br>
                 
-                <label>Выберите количество кластеров:
+                <label>Выберите количество кластеров для K-Means++:
                     <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
                 </label> </br>
 
@@ -58,17 +58,9 @@
             <label class="clsname">Метод кластеризации: DBSCAN</label> <br>
 
             <div class="controls">
-                <label id="distances">Расстояние: 
-                    <select id="distanceBox3">
-                        <option value="Euclidian" selected>Евклидово</option>
-                        <option value="Manchattan">Манхэттенское</option>
-                        <option value="Chebichev">Чебышева</option>
-                    </select>
-                </label> </br>
-
                 <label> Выберите значение для eps:
-                    <input id="labEps" type="number" autofocus step="5" min="5" max="100" value="5">
-                </label> </br>
+                    <input id="labEps" type="number" autofocus step="5" min="25" max="120" value="25">
+                </label>
             </div>
         </div>
     </body>

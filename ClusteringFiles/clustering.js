@@ -255,8 +255,8 @@ MeanShift.prototype.GetNewCenter = function(arr){
     return {x: x, y: y};
 }
 //MeanShift: проверка расположения в границах окна
-MeanShift.prototype.IsInBounds = function(center, dot){
-    let dist = this.Distance(dot, center, "Euclidian");
+MeanShift.prototype.IsInBounds = function(center, dot, distType){
+    let dist = this.Distance(dot, center, distType);
     if (dist <= this.radius){
         return true;
     }
@@ -265,16 +265,16 @@ MeanShift.prototype.IsInBounds = function(center, dot){
     }
 }
 //MeanShift: проверка, есть ли уже в области существующего центра
-MeanShift.prototype.IsInClusters = function(center){
+MeanShift.prototype.IsInClusters = function(center, distType){
     for (let i = 0; i < this.clusters.length; i++){
-        if (this.IsInBounds(this.clusters[i].center, center)){
+        if (this.IsInBounds(this.clusters[i].center, center, distType)){
             return i;
         }
     }
     return -1;
 }
 //MeanSift: кластеризация
-MeanShift.prototype.Clusterize = function(){
+MeanShift.prototype.Clusterize = function(distType){
     this.clusters.length = 0;
     let currCenters = [];
     for (let i = 0; i < this.dots.length; i++){
@@ -283,7 +283,7 @@ MeanShift.prototype.Clusterize = function(){
         while (flag == false){
             let inBounds = [];
             for (let j = 0; j < this.dots.length; j++){
-                if (this.IsInBounds(tmpCenter, this.dots[j])){
+                if (this.IsInBounds(tmpCenter, this.dots[j], distType)){
                     inBounds.push(this.dots[j]);
                 }
             }
@@ -302,7 +302,7 @@ MeanShift.prototype.Clusterize = function(){
     currCenters.sort((a, b) => b.cnt - a.cnt);
     this.clusters.push({center:{x:currCenters[0].cent.x,y:currCenters[0].cent.y}, dots:[]});
     for (let i = 0; i < currCenters.length; i++){
-        let res = this.IsInClusters(currCenters[i].cent);
+        let res = this.IsInClusters(currCenters[i].cent, distType);
         
         if (res != -1){
             this.clusters[res].dots.push(currCenters[i].dot);
@@ -317,9 +317,6 @@ MeanShift.prototype.Clusterize = function(){
 MeanShift.prototype.ClearCanvas = function(){
     this.clusters.length = 0;
     this.dots.length = 0;
-    cnt.max = 1;
-    cnt.value = 1;
-    count = 0;
     this.ctx2.clearRect(0, 0, this.width, this.height);
 }
 
@@ -441,16 +438,12 @@ DBSCAN.prototype.Clusterize = function(distType, eps){
             }
         }
     }
-
-    console.log(this.clusters.length);
 }
 //Очистка поля
 DBSCAN.prototype.ClearCanvas = function(){
     this.clusters.length = 0;
     this.dots.length = 0;
-    cnt.max = 1;
-    cnt.value = 1;
-    count = 0;
+    eps.value = 25;
     this.ctx3.clearRect(0, 0, this.width, this.height);
 }
 
@@ -462,7 +455,6 @@ let canvas3 = document.getElementById("myCanvas3");
 var ctx3 = canvas3.getContext('2d');
 
 var distType = document.getElementById("distanceBox");
-var drawAreas = document.getElementById("areasCheckbox");
 var cnt = document.getElementById("labCount");
 var eps = document.getElementById("labEps");
 var count = 0;
@@ -496,7 +488,7 @@ document.getElementById("clustButton").onclick = function ButtonKMeansClusterize
     kmeans.Clusterize(cnt.value, distType.value);
     kmeans.Draw();
 
-    meanshift.Clusterize();
+    meanshift.Clusterize(distType.value);
     meanshift.Draw();
 
     dbscan.Clusterize(distType.value, eps.value);
