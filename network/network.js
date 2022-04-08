@@ -984,10 +984,9 @@ function show() {
         }
 
         let label = document.createElement("label");
-        label.id = "answer"
-        label.style = "font-size: 150px"
+        label.id = "answer";
         label.innerHTML = ind;
-        document.getElementById("main").appendChild(label);
+        document.getElementById("todrawin").appendChild(label);
     }
 }
 
@@ -1032,4 +1031,5 @@ canvas.addEventListener("mouseup", function (e) {
 
 function clearCanvas() {
     context.clearRect(0,0, canvas.width, canvas.height);
+    document.getElementById("answer").innerHTML = "";
 }
