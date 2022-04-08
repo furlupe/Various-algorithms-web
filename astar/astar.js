@@ -295,9 +295,6 @@ function createTable(){
             cell.dataset.x = column; // координата x
             cell.dataset.y = row; // координата y
 
-            cell.height = 20;
-            cell.width = 20;
-
             matrix[column][row] = 0;
         }
     }
@@ -388,7 +385,7 @@ async function aStar(){
         openList.sort(compare); // отсортировать список доступных узлов в порядке убывания
 
         current = openList[0]; // взять в качестве текущего узла узел с min g
-        await sleep(75);
+        await sleep(Number(document.getElementById("animspeed").value));
         if (!(current.x == start.x && current.y == start.y) && !(current.x == finish.x && current.y == finish.y)) {
             document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "checking";
         }
@@ -445,7 +442,7 @@ async function aStar(){
     } else {
         // закрасить путь
         for(;current.parent != null; current = current.parent) {
-            await sleep(100);
+            await sleep(Number(document.getElementById("animspeed").value));
             if (!(current.x == finish.x && current.y == finish.y))
                 document.getElementById("lab").rows[current.y].cells[current.x].dataset.mode = "path"
         }

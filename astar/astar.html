@@ -13,7 +13,7 @@
         <img src="additionFiles/geo_sign.png">
         <div id="decrease" class="arrow arrow-decrease" onclick="decreaseInput()"></div>
         <div id="increase" class="arrow arrow-increase" onclick="increaseInput()"></div>
-        <input id="labSize" type="number" onchange="createTable()" autofocus step="1" min="2" max="20" value="2">
+        <input id="labSize" type="number" onchange="createTable()" autofocus step="1" min="2" max="60" value="2"/>
     </div>
 
     <div id="tableTheme">
@@ -24,6 +24,8 @@
         <button id="acceptChangesButton" type="button" onclick="acceptChanges()">Применить изменения</button>
         <button id="pathSearchButton" type="button" onclick="aStar()" disabled="disabled">Найти путь</button>
         <button id="pathChangeButton" type="button" onclick="clearTargets()" disabled="disabled">Изменить путь</button>
+        <input id="animspeed" type="range" min="10" max="100" value="100" oninput="document.getElementById('showanimspeed').innerHTML = 'Задержка анимации: ' + this.value "/>
+        <label id="showanimspeed">Задержка анимации: 100</label>
         <img src="additionFiles/noelle.png" />
     </div>
 </body>

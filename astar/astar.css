@@ -17,6 +17,9 @@ body {
     background-image: url("additionFiles/geo_theme.png");
 }
 
+input[type=range] {
+    -webkit-appearance: none;
+}
 
 /* стили для ячеек таблицы */
 table {
@@ -158,8 +161,55 @@ div {
 
 #pathbuttonsTheme img {
     position: absolute;
-    left: 175px;
+    left: 167px;
+    top: 217px;
+}
+
+#pathbuttonsTheme input {
+    width: 530px;
+    height: 0.5rem;
+    left: 275px;
     top: 200px;
+    background-color: #EAD5B6;
+}
+
+#pathbuttonsTheme input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #EAD5B6;
+    width: 30px;
+    height: 30px;
+    border: 5px solid black;
+    border-radius: 20px;
+    margin-top: -6px;
+}
+
+#pathbuttonsTheme input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #EAD5B6;
+    border-radius: 20px;
+    height: 17px;
+}
+
+#pathbuttonsTheme input[type="range"]::-moz-range-track {
+    background: #EAD5B6;
+    border-radius: 20px;
+}
+
+#pathbuttonsTheme input[type="range"]::-moz-range-thumb {
+    background-color: #EAD5B6;
+    width: 20px;
+    height: 20px;
+    border: 5px solid black;
+    border-radius: 20px;
+}
+
+#pathbuttonsTheme label {
+    position: absolute;
+    font-family: Genshin;
+    font-size: 20px;
+    text-align: center;
+    width: 255px;
+    left: 148px;
+    top: 220px;
 }
 
 /* стили input'ов */
