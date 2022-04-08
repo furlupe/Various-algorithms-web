@@ -169,7 +169,7 @@ function primmLabyrinth() {
 
                     // проходим по каждому направлению и смотрим, есть ли стена или нет
                     if (isInside(column + dir[0], row + dir[1], size)) {
-                        around += !(matrix[column + dir[0]][row + dir[1]]);
+                        around += !( matrix[column + dir[0]][row + dir[1]] );
                     }
                 }
                 console.log(column, row, around > 3);
