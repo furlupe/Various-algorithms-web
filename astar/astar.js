@@ -62,6 +62,11 @@ function primmLabyrinth() {
         document.getElementById('lab').rows[x].cells[y].dataset.mode = "empty";
     }
 
+    function makeWall(x, y) {
+        matrix[x][y] = 1;
+        document.getElementById('lab').rows[x].cells[y].dataset.mode = "wall";
+    }
+
     // превращаем все ячейки в стены
     matrix.length = 0;
     for (var i = 0; i < size; i++) {
@@ -72,7 +77,7 @@ function primmLabyrinth() {
         }
     }
 
-    var cell = createPoint(getRandomInt(0, size), getRandomInt(0, size)); // случайная точка для начала построения
+    var cell = createPoint(getRandomInt(0, size / 2) * 2 + 1, getRandomInt(0, size / 2) * 2 + 1); // случайная точка для начала построения
 
     makeEmpty(cell.x, cell.y); // делаем ее пустой
 
@@ -147,6 +152,43 @@ function primmLabyrinth() {
         }
     }
 
+    // После работы генератора, на поле остается множество точек, стоящих в одиночку, т.е. тупо одна стена и вокруг нее пустоты. Смотрится это не очень, да и на лабиринит не похоже
+    // поэтому нижеописанная ниже штука ищет все такие "одиночные" стены и объединяет ее с близлежащей.
+    // На самом деле почему-то выходит, что такие одиночные стены окружены пустотой после которой сразу идут другие стены, то есть достаточно добавить еще одну стену в любом направлении
+    // и наша одиночка будет гарантированно объединена с какой-то из других стен. В редких случаях, конечно, образуется просто стенка из двух клеток, что тоже лучше, чем одна.
+
+    // направления движения
+    var directions = new Array([1, 0], [-1, 0], [0, 1], [0, -1])
+    for (let column = 0; column < size; column++) {
+        for (let row = 0; row < size; row++) {
+            // кол-во пустых клеток, прилежащих к рассматриваемой клетке
+            let around = 0;
+
+            if (matrix[column][row] === 1) {
+                for (let dir of directions) {
+
+                    // проходим по каждому направлению и смотрим, есть ли стена или нет
+                    if (isInside(column + dir[0], row + dir[1], size)) {
+                        around += !(matrix[column + dir[0]][row + dir[1]]);
+                    }
+                }
+                console.log(column, row, around > 3);
+
+                // если у клетки нет ни одной прилежащей стены
+                if (around > 3) {
+                    // выбираем случайное направление
+                    let dirIndex = getRandomInt(0, directions.length);
+                    let dir = directions[dirIndex]
+
+                    // и если оно внутри поля, то закрашиваем его
+                    if (isInside(column + dir[0], row + dir[1], size)) {
+                        matrix[column + dir[0]][row + dir[1]] = 1;
+                        document.getElementById('lab').rows[column + dir[0]].cells[row + dir[1]].dataset.mode = "wall";
+                    }
+                }
+            }
+        }
+    }
 }
 
 // создать стену на нажатой ячейке
