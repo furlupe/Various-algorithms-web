@@ -68,23 +68,6 @@ function drawCText(item) {
         context2.fill();
         context2.stroke(); 
 }
-// function drawLine() {
-//     let x0 = circles[circles.length-1].x;
-//     let y0 = circles[circles.length-1].y;
-//     for(let i=circles.length-2; i>=0; i--) {
-//         let x1 = circles[i].x;
-//         let y1 = circles[i].y;
-//         // Рисуем линии
-//         context.beginPath();
-//         context.moveTo(x0, y0); 
-//         context.lineTo(x1, y1);
-//         context.lineWidth = 3;         // толщина
-//         context.strokeStyle = 'black'; // цвет
-//         context.fill();
-//         context.stroke(); 
-//     }
-// }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Point {
     constructor(id, x, y, pher, dist) {
@@ -119,10 +102,6 @@ function erase() {
     let table = document.querySelector('table');
     document.querySelector('.thead').style.display  = 'none';
     table.parentNode.removeChild(table);
-    // document.querySelector('.thead').style.display  = 'none';
-    // let output = document.getElementById('output');
-    // output.removeChild(tbody);
-    // // output.parentNode.removeChild(table);
 }
 
 let points = []; //хранение данных для каждой вершины
@@ -166,36 +145,10 @@ async function antAlgorithm() {
         }
         changePheromone(ways);
         ways = [];
-        // let res = check();
-        // if(tempWay.length == 0 || (distCheck(tempWay, res) == true && tempWay[outputMinIndex(tempWay)].dist > res.dist)) {
-        //     // repeat = 0;
-        //     tempWay.push(res);
-        //     await new Promise((resolve, reject) => setTimeout(resolve, 200));
-        //     clear();
-        //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
-        //     drawLine(res);
-        // }
-        // else {
         repeat+=1;
-        // }
-        // repeat = countRepeat(ways);
     }
-    //последний финальный выигрывающий ключевой прекрасный муравей(представьте что он золотой)
-    // let indexMin = outputMinIndex(copy);
     let outputFitness = [];
     let outputId = [];
-    // let index = 0;
-    // console.log(points);
-    // outputId.push(points[index]);
-    // while(outputId.length != circles.length) {
-    //     let probability = probabilityPoints(outputId, index);
-    //     let choice = choicePoint(probability);
-    //     index = choice;
-    //     outputId.push(points[choice]);
-    // }
-    // outputId.push(outputId[0]); 
-    // outputFitness = distance(outputId);
-    // let temp = min;
     let temp = minWay.way.slice(minWay.way.findIndex(i => i == points[0]));
     for(let i = 1; i <= minWay.way.findIndex(i => i == points[0]); i++) {
         temp.push(minWay.way[i]);
