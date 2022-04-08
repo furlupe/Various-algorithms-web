@@ -171,9 +171,10 @@ function resizeImage(img, scale = 0.2) {
 function show() {
     net = new Network([784, 30, 10]);
 
-    //let a = net.feedforward(test);
     let img = new Image();
     img.src = canvas.toDataURL();
+
+    console.log(img.src);
 
     img.onload = () => {
         let r = resizeImage(img);
