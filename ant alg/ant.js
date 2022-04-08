@@ -1,11 +1,13 @@
 window.onload = function() {
     // Определение контекста рисования
-    canvas = document.getElementById("canvas");
-    context = canvas.getContext("2d");  
-    context.beginPath();
-    context.rect(0, 0, 900, 700);
-    context.fillStyle = "rgba(0, 0, 0, 0)";
-    context.fill();
+    canvas2 = document.getElementById("canvas2");
+    canvas1 = document.getElementById("canvas1");
+    context1 = canvas1.getContext("2d");
+    context2 = canvas2.getContext("2d");  
+    context2.beginPath();
+    context2.rect(0, 0, 900, 700);
+    context2.fillStyle = "rgba(0, 0, 0, 0)";
+    context2.fill();
 }
 
 let circles = [];
@@ -22,7 +24,7 @@ class Circle {
     }
 }
 
-canvas.onmousedown = function(event){
+canvas2.onmousedown = function(event){
     let x = event.offsetX || 0;
     let y = event.offsetY || 0;
     id= ++id;
@@ -33,9 +35,9 @@ canvas.onmousedown = function(event){
     console.log(circles);
     
    
-    if (circles.length >= 2){
-        drawLine();
-    } 
+    // if (circles.length >= 2){
+    //     drawLine();
+    // } 
     drawCircles();
     circles.forEach(function(item) {
         drawCText(item);
@@ -47,41 +49,41 @@ function drawCircles() {
     for(let i=0; i<circles.length; i++) {
         let circle = circles[i];
         // Рисуем текущий круг
-        context.beginPath();
-        context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
-        context.fillStyle = "rgb(172, 138, 180)";
-        context.strokeStyle = "black";
-        context.fill();
-        context.stroke(); 
+        context2.beginPath();
+        context2.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
+        context2.fillStyle = "rgb(172, 138, 180)";
+        context2.strokeStyle = "black";
+        context2.fill();
+        context2.stroke(); 
     }
 }
 function drawCText(item) {
     console.log(item);
-        context.beginPath();
-        context.textAlign = "center"
-        context.fillStyle = "black";
-        context.strokeStyle = "black";
-        context.font = "26px Genshin Impact";
-        context.fillText(item.id, item.x,  item.y+(item.radius/2));
-        context.fill();
-        context.stroke(); 
+        context2.beginPath();
+        context2.textAlign = "center"
+        context2.fillStyle = "black";
+        context2.strokeStyle = "black";
+        context2.font = "26px Genshin Impact";
+        context2.fillText(item.id, item.x,  item.y+(item.radius/2));
+        context2.fill();
+        context2.stroke(); 
 }
-function drawLine() {
-    let x0 = circles[circles.length-1].x;
-    let y0 = circles[circles.length-1].y;
-    for(let i=circles.length-2; i>=0; i--) {
-        let x1 = circles[i].x;
-        let y1 = circles[i].y;
-        // Рисуем линии
-        context.beginPath();
-        context.moveTo(x0, y0); 
-        context.lineTo(x1, y1);
-        context.lineWidth = 3;         // толщина
-        context.strokeStyle = 'black'; // цвет
-        context.fill();
-        context.stroke(); 
-    }
-}
+// function drawLine() {
+//     let x0 = circles[circles.length-1].x;
+//     let y0 = circles[circles.length-1].y;
+//     for(let i=circles.length-2; i>=0; i--) {
+//         let x1 = circles[i].x;
+//         let y1 = circles[i].y;
+//         // Рисуем линии
+//         context.beginPath();
+//         context.moveTo(x0, y0); 
+//         context.lineTo(x1, y1);
+//         context.lineWidth = 3;         // толщина
+//         context.strokeStyle = 'black'; // цвет
+//         context.fill();
+//         context.stroke(); 
+//     }
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Point {
@@ -108,20 +110,40 @@ class Probability {
     }
 }
 
+function erase() {
+    clear(context1);
+    clear(context2);
+    points = [];
+    circles = [];
+    id = 0;
+    let table = document.querySelector('table');
+    document.querySelector('.thead').style.display  = 'none';
+    table.parentNode.removeChild(table);
+    // document.querySelector('.thead').style.display  = 'none';
+    // let output = document.getElementById('output');
+    // output.removeChild(tbody);
+    // // output.parentNode.removeChild(table);
+}
+
 let points = []; //хранение данных для каждой вершины
 
 // ОСНОВНОЙ АЛГОРИТМ
-function antAlgorithm() {
+async function antAlgorithm() {
+    // let tempWay = [];
     let antCount = circles.length;
     fillingPoints();
-    let last = 0;
     let repeat = 0;
-    let copy;
-    while(repeat < 1000) {
+    let minWay;
+    // let copy;
+    while(repeat <= circles.length * circles.length) {
+        // let last = 0;
         let ways = []; //хранение путей с расстоянием
         for(let i = 0; i < antCount; i++) {
+            // if(last == circles.length) {
+            //     last = 0;
+            // }
             let way = [];
-            let index = last;
+            let index = i;
             way.push(points[index])
             while(way.length != circles.length) {
                 let probability = probabilityPoints(way, index);
@@ -131,30 +153,59 @@ function antAlgorithm() {
             }
             way.push(way[0]);
             let temp = new Way(way, distance(way));
-            last = index;
+            if(minWay == undefined || temp.dist < minWay.dist) {
+                minWay = temp;
+                await new Promise((resolve, reject) => setTimeout(resolve, 200));
+                clear(context1);
+                // await new Promise((resolve, reject) => setTimeout(resolve, 100));
+                drawLine(minWay);
+            }
+            // last += 1;
             ways.push(temp);
-            copy = ways.slice();
+            // copy = ways.slice();
         }
         changePheromone(ways);
-        repeat += 1;
+        ways = [];
+        // let res = check();
+        // if(tempWay.length == 0 || (distCheck(tempWay, res) == true && tempWay[outputMinIndex(tempWay)].dist > res.dist)) {
+        //     // repeat = 0;
+        //     tempWay.push(res);
+        //     await new Promise((resolve, reject) => setTimeout(resolve, 200));
+        //     clear();
+        //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
+        //     drawLine(res);
+        // }
+        // else {
+        repeat+=1;
+        // }
         // repeat = countRepeat(ways);
     }
     //последний финальный выигрывающий ключевой прекрасный муравей(представьте что он золотой)
     // let indexMin = outputMinIndex(copy);
     let outputFitness = [];
     let outputId = [];
-    let index = 0;
-    console.log(points);
-    outputId.push(points[index]);
-    while(outputId.length != circles.length) {
-        let probability = probabilityPoints(outputId, index);
-        let choice = choicePoint(probability);
-        index = choice;
-        outputId.push(points[choice]);
+    // let index = 0;
+    // console.log(points);
+    // outputId.push(points[index]);
+    // while(outputId.length != circles.length) {
+    //     let probability = probabilityPoints(outputId, index);
+    //     let choice = choicePoint(probability);
+    //     index = choice;
+    //     outputId.push(points[choice]);
+    // }
+    // outputId.push(outputId[0]); 
+    // outputFitness = distance(outputId);
+    // let temp = min;
+    let temp = minWay.way.slice(minWay.way.findIndex(i => i == points[0]));
+    for(let i = 1; i <= minWay.way.findIndex(i => i == points[0]); i++) {
+        temp.push(minWay.way[i]);
     }
-    outputId.push(outputId[0]);
-    outputFitness = distance(outputId);
-
+    console.log(temp);
+    outputId = temp;
+    outputFitness = minWay.dist;
+    clear(context1);
+    drawLine(minWay);
+    // console.log(tempWay[outputMinIndex(tempWay)].dist);
     //вывод
     let result = [];
     for (let i=0; i<outputId.length; i++){
@@ -188,6 +239,55 @@ function antAlgorithm() {
 
         tbody.appendChild(tr);
     // }
+}
+
+function distCheck(array, way) {
+    for(let i = 0; i < array.length; i++) {
+        if(array[i].dist == way.dist) {
+            return false;
+        }
+    }
+    // if (array.length > 0 && array[outputMinIndex(array)].dist > way.dist) {
+    //     return  true;
+    // }
+    return true;
+}
+
+async function drawLine(way) {
+    for(let i = 0; i < way.way.length - 1; i++) {   
+        let x0 = way.way[i].x;
+        let y0 = way.way[i].y;
+        let x1 = way.way[i + 1].x;
+        let y1 = way.way[i + 1].y;
+        // Рисуем линии
+        context1.beginPath();
+        context1.moveTo(x0, y0); 
+        context1.lineTo(x1, y1);
+        context1.lineWidth = 3;         // толщина
+        context1.strokeStyle = 'black'; // цвет
+        context1.fill();
+        context1.stroke(); 
+    }
+}
+
+async function clear(ctx) {
+    ctx.clearRect(0, 0, 900, 700);
+}
+
+function check() {
+    let way = [];
+    let index = 0;
+    // console.log(points);
+    way.push(points[index]);
+    while(way.length != circles.length) {
+        let probability = probabilityPoints(way, index);
+        let choice = choicePoint(probability);
+        index = choice;
+        way.push(points[choice]);
+    }
+    way.push(way[0]);
+    let result = new Way(way, distance(way));
+    return result;
 }
 
 //тоже бесполезно но на всякий
@@ -265,7 +365,7 @@ function probabilityPoints(way, start) {
         if(way.includes(points[i]) || i == start) {
             continue;
         }
-        let tmp = new Probability(Math.pow(points[start].dist[i], 4) * Math.pow(points[start].pher[i], 1), i + 1);
+        let tmp = new Probability(Math.pow(points[start].dist[i], 2) * Math.pow(points[start].pher[i], 1), i + 1);
         sumProbability += tmp.probability;
         array.push(tmp);
     }
@@ -282,7 +382,7 @@ function fillingPoints() {
     for(let j = 0; j < circles.length; j++) {
         let temp = [];
         for (let i = 0; i < circles.length; i++) {
-        temp[i] = 0.2;
+        temp[i] = 0.02;
         }
         temp1 = distanceTwo(circles[j]);
         let point = new Point(circles[j].id, circles[j].x, circles[j].y, temp, temp1);
@@ -296,7 +396,7 @@ function distanceTwo(point) {
     for(let i = 0; i < circles.length; i++) {
         xDist = Math.abs(point.x - circles[i].x);
         yDist = Math.abs(point.y - circles[i].y);
-        distance.push(300/(Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))));
+        distance.push(200/(Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))));
     }
     return distance;
 }

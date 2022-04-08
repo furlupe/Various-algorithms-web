@@ -1,12 +1,13 @@
 html{
-    background: url(./antImg/lxwh1ksiupu51.png) no-repeat;
+    background: url(./antImg/minxiao.png) no-repeat;
     background-size: 73%;
-    background-position: 170% 10%;
+    background-position: 170% 0%;
     /* background-position:right; */
     /* background-size: auto; */
     background-color: rgb(198,231,251);
 }
-#canvas{
+#canvas1{
+    position: absolute;
     margin: 25px;
     box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     border-radius: 12px;
@@ -14,12 +15,18 @@ html{
     background: url(./antImg/Element_Anemo.png) center no-repeat;
     background-color: rgb(58, 131, 127);
 }
-#Result{
-    color: black;
+#canvas2 {
+    margin: 25px;
+    border-radius: 12px;
+    position: absolute;
+    background-color: rgba(240, 248, 255, 0);
+}
+.btn button{
+    display: inline-block;
     border: none;
     outline: none;
     padding: 1.2rem 2rem;
-    padding-left: 70px;
+    
     cursor: pointer;
     user-select: none;
     margin: 25px;
@@ -28,9 +35,28 @@ html{
     border-radius: 12px;
     box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
     background: url(./antImg/Element_Anemo.png) center no-repeat;
-    background-size: 12%;
-    background-position: 5px;   
     background-color: rgb(58, 131, 127);
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+#Result,#Erase{ 
+    background-color: rgb(58, 131, 127);
+    color: black;
+}
+#Result:hover,#Erase:hover{
+    background-color: rgb(14, 78, 76);
+    color: white;
+}
+#Result{
+    background-size: 12%; 
+    background-position: 5px; 
+    padding-left: 70px; 
+}
+#Erase{
+    text-align: center;
+    color: rgba(255, 255, 255, 0);
+    background-size: 27%;
+    padding: 1.2rem 80px;
 }
 body {
     font-size: 25px;
@@ -46,7 +72,7 @@ table {
     border-radius: 6px;
 }
 .blockBody{
-    display: flex;
+    display: inline-block;
 }
 thead{
     display: inline-block;
@@ -61,6 +87,7 @@ td, tr {
 }
 
 #output {
+    margin-left: 1000px;
     color: black;
     padding-left: 10px;
     text-align: center;

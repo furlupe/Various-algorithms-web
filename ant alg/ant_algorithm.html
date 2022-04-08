@@ -6,12 +6,16 @@
     <h1 id="top">Муравьиный алгоритм</h1>
 </head>
 <body>  
-    <div class="btn-group vert">
-        <button onclick="antAlgorithm();" type="button" class="btn btn-def" id="Result">Рассчитать кратчайший путь</button>
+    <div class="btn">
+        <button onclick="antAlgorithm();" type="button" id="Result">Рассчитать кратчайший путь</button>
+        <button onclick="erase();" type="button" id="Erase">Стерка</button>
     </div>
     <div class="blockBody">
-        <canvas id="canvas" width="900" height="700">
-        Your browser does not support the HTML5 canvas tag.
+        <canvas id="canvas1" width="900" height="700">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <canvas id="canvas2" width="900" height="700">
+            Your browser does not support the HTML5 canvas tag.
         </canvas> 
         <div id="output">
             <p class="thead">Результат :3</p>
