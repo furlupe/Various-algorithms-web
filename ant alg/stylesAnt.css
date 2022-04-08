@@ -26,7 +26,6 @@ html{
     border: none;
     outline: none;
     padding: 1.2rem 2rem;
-    
     cursor: pointer;
     user-select: none;
     margin: 25px;
@@ -38,6 +37,13 @@ html{
     background-color: rgb(58, 131, 127);
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
+}
+#Erase{
+    padding: 1.2rem 3.5rem;
+    background: url(./antImg/t03_burst_BaneofAllEvil.png) center no-repeat;
+    padding-left: 86px;
+    background-size: 27%;
+    background-position: 5px;
 }
 #Result,#Erase{ 
     background-color: rgb(58, 131, 127);
@@ -52,12 +58,7 @@ html{
     background-position: 5px; 
     padding-left: 70px; 
 }
-#Erase{
-    text-align: center;
-    color: rgba(255, 255, 255, 0);
-    background-size: 27%;
-    padding: 1.2rem 80px;
-}
+
 body {
     font-size: 25px;
     font-family: "Genshin Impact";
