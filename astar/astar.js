@@ -77,7 +77,7 @@ function primmLabyrinth() {
         }
     }
 
-    var cell = createPoint(getRandomInt(0, size), getRandomInt(0, size)); // случайная точка для начала построения
+    var cell = createPoint(getRandomInt(0, size / 2) * 2 + 1, getRandomInt(0, size / 2) * 2 + 1); // случайная точка для начала построения
 
     makeEmpty(cell.x, cell.y); // делаем ее пустой
 
@@ -163,6 +163,7 @@ function primmLabyrinth() {
         for (let row = 0; row < size; row++) {
             // кол-во пустых клеток, прилежащих к рассматриваемой клетке
             let around = 0;
+
             if (matrix[column][row] === 1) {
                 for (let dir of directions) {
 
