@@ -1,11 +1,13 @@
 window.onload = function() {
     // Определение контекста рисования
-    canvas = document.getElementById("canvas");
-    context = canvas.getContext("2d");  
-    context.beginPath();
-    context.rect(0, 0, 900, 700);
-    context.fillStyle = "rgba(0, 0, 0, 0)";
-    context.fill();
+    canvas2 = document.getElementById("canvas2");
+    canvas1 = document.getElementById("canvas1");
+    context1 = canvas1.getContext("2d");
+    context2 = canvas2.getContext("2d");  
+    context2.beginPath();
+    context2.rect(0, 0, 900, 700);
+    context2.fillStyle = "rgba(0, 0, 0, 0)";
+    context2.fill();
 }
 
 let circles = [];
@@ -22,7 +24,7 @@ class Circle {
     }
 }
 
-canvas.onmousedown = function(event){
+canvas2.onmousedown = function(event){
     let x = event.offsetX || 0;
     let y = event.offsetY || 0;
     id= ++id;
@@ -33,9 +35,9 @@ canvas.onmousedown = function(event){
     console.log(circles);
     
    
-    if (circles.length >= 2){
-        drawLine();
-    } 
+    // if (circles.length >= 2){
+    //     drawLine();
+    // } 
     drawCircles();
     circles.forEach(function(item) {
         drawCText(item);
@@ -47,121 +49,155 @@ function drawCircles() {
     for(let i=0; i<circles.length; i++) {
         let circle = circles[i];
         // Рисуем текущий круг
-        context.beginPath();
-        context.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
-        context.fillStyle = "pink";
-        context.strokeStyle = "black";
-        context.fill();
-        context.stroke(); 
+        context2.beginPath();
+        context2.arc(circle.x, circle.y, circle.radius, 0, Math.PI*2);
+        context2.fillStyle = "pink";
+        context2.strokeStyle = "black";
+        context2.fill();
+        context2.stroke(); 
     }
 }
 function drawCText(item) {
     console.log(item);
-        context.beginPath();
-        context.textAlign = "center"
-        context.fillStyle = "black";
-        context.strokeStyle = "black";
-        context.font = "26px Genshin Impact";
-        context.fillText(item.id, item.x,  item.y+(item.radius/2));
-        context.fill();
-        context.stroke(); 
-}
-function drawLine() {
-    let x0 = circles[circles.length-1].x;
-    let y0 = circles[circles.length-1].y;
-    for(let i=circles.length-2; i>=0; i--) {
-        let x1 = circles[i].x;
-        let y1 = circles[i].y;
-        // Рисуем линии
-        context.beginPath();
-        context.moveTo(x0, y0); 
-        context.lineTo(x1, y1);
-        context.lineWidth = 3;         // толщина
-        context.strokeStyle = 'black'; // цвет
-        context.fill();
-        context.stroke(); 
-    }
+        context2.beginPath();
+        context2.textAlign = "center"
+        context2.fillStyle = "black";
+        context2.strokeStyle = "black";
+        context2.font = "26px Genshin Impact";
+        context2.fillText(item.id, item.x,  item.y+(item.radius/2));
+        context2.fill();
+        context2.stroke(); 
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let allChromosome = [];
-function geneticAlgorithm(){
-    let generations = []; //массив где будут храниться все наши поколения (пути)
-    let fitness = []; //массив с длинами путей
-    let countElement = numberOfelement(circles.length - 1); //генерация оптимального(нет) кол-ва предков
+class Way {
+    constructor(way, dist) {
+        this.way = way;
+        this.dist = dist;
+    }
+}
+
+function erase() {
+    clear(context1);
+    clear(context2);
+    points = [];
+    circles = [];
+    id = 0;
+    let table = document.querySelector('table');
+    document.querySelector('.thead').style.display  = 'none';
+    table.parentNode.removeChild(table);
+}
+
+async function geneticAlgorithm(){
+    let generations = []; //массив где будут храниться все наши поколения
+    let countElement = circles.length; //генерация оптимального(нет) кол-ва предков
      //генерация первого поколения 
      let i = 0;
      while(i < countElement) {
-         let temp = firstGeneration();
-         if(!generations.includes(temp)){
-             generations.push(temp);
-             i++;
-         }
-     }
-    for (let i = 0; i < generations.length; i++) { //подсчет длин путей для каждого предка
-        fitness[i] = distance(generations[i]); 
+        let tempWay = firstGeneration();
+        let temp = new Way(tempWay, distance(tempWay));
+        if(!generations.includes(temp)){
+            generations.push(temp);
+            i++;
+        }
     }
-    allChromosome = generations.slice();
     let outputFitness = [];
     let outputId = [];
-    let tri = 0;
-    if((fitness.length == 2 && fitness[0] == fitness[1]) || fitness.length == 1 || fitness.length == 3) {
-        outputId.push(generations[0]);
-        outputFitness.push(fitness[0]);
+
+    if(circles.length <= 3) {
+        outputId.push(generations[0].way);
+        outputFitness.push(generations[0].dist);
     }
-    // let countRepeat = 0;
-    let fl = false;
-    while(countRepeat(fitness, fitness[outputMinIndex(fitness, 0)]) <= fitness.length / 4) {
-        crossover(generations, fitness);
-        // console.log(countRepeat);
-        tri++;    
-        if(!outputFitness.includes(fitness[outputMinIndex(fitness, 0)])) {
-            outputFitness.push(fitness[outputMinIndex(fitness, 0)]);
-            fl = true;
-            // countRepeat = 0;
+    let countRepeat = 0;
+    let preMinWay;
+
+    while(countRepeat <= circles.length * circles.length * circles.length) {
+        crossover(generations);
+        let minWay = new Way(generations[outputMinIndex(generations, 0)].way, generations[outputMinIndex(generations, 0)].dist);
+        if(preMinWay == undefined || preMinWay.dist > minWay.dist) {
+            outputId.push(minWay.way);
+            outputFitness.push(minWay.dist);
+            if(preMinWay != undefined){
+                let table = document.querySelector('table');
+                document.querySelector('.thead').style.display  = 'none';
+                table.parentNode.removeChild(table);
+            }
+            preMinWay = minWay;
+            output(minWay, false);
+            await new Promise((resolve, reject) => setTimeout(resolve, 200));
+            clear(context1);
+            // await new Promise((resolve, reject) => setTimeout(resolve, 100));
+            drawLine(outputId[outputId.length - 1]);
+            countRepeat = 0;
         }
-        if(!outputId.includes(generations[outputMinIndex(fitness, 0)]) && fl == true) {
-            outputId.push(generations[outputMinIndex(fitness, 0)]);
+        else{
+            countRepeat+=1;
         }
-     
-        fl = false;
     } 
-    //вывод крч
+    let table = document.querySelector('table');
+    document.querySelector('.thead').style.display  = 'none';
+    table.parentNode.removeChild(table);
+    output(preMinWay, true);
+}
+function output(way, flag) {
     let result = [];
-    for (let i=0; i<outputId.length; i++){
-        result.push(outputId[i].map(elem => elem.id).join(" "));
+    for (let i=0; i<way.way.length; i++){
+        result.push(way.way.map(elem => elem.id).join(" "));
     }
-    let floorFitness = [];
-    for(let i = 0; i < outputFitness.length; i++) {
-        floorFitness[i] = Math.floor(outputFitness[i]);
-    }
+    // let floorFitness = [];
+    // for(let i = 0; i < way.dist.length; i++) {
+    let floorFitness = Math.round(way.dist);
+    // }
     let arr =[]
-    arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] }))
-    console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness[i] })))
+    arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness }))
+    console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness })))
 
     let table = document.createElement('table');
     let tbody = document.createElement('tbody');
     table.appendChild(tbody);
     document.getElementById('output').appendChild(table);
     document.querySelector('.thead').style.display  = 'block';
-    for (let ind of arr)  {
+    // for (let ind of arr)  {
 
         let tr = document.createElement('tr');
 
-        let td1 = document.createElement('td');
-        td1.innerHTML = arr.indexOf(ind)+1;
-        tr.appendChild(td1);
+        // let td1 = document.createElement('td');
+        // td1.innerHTML = arr.indexOf(ind)+1;
+        // tr.appendChild(td1);
 
         let td2 = document.createElement('td');
-        td2.innerHTML = ind.result;
+        td2.innerHTML = result[0];
+        if(flag == true) {
+            td2.innerHTML = 'WIN ' + result[0];
+        }
         tr.appendChild(td2);
     
         let td3 = document.createElement('td');
-        td3.innerHTML = ind.floorFitness;
+        td3.innerHTML = floorFitness;
         tr.appendChild(td3);
 
         tbody.appendChild(tr);
+}
+
+async function drawLine(way) {
+    for(let i = 0; i < way.length - 1; i++) {   
+        let x0 = way[i].x;
+        let y0 = way[i].y;
+        let x1 = way[i + 1].x;
+        let y1 = way[i + 1].y;
+        // Рисуем линии
+        context1.beginPath();
+        context1.moveTo(x0, y0); 
+        context1.lineTo(x1, y1);
+        context1.lineWidth = 3;         // толщина
+        context1.strokeStyle = 'black'; // цвет
+        context1.fill();
+        context1.stroke(); 
     }
+}
+
+async function clear(ctx) {
+    ctx.clearRect(0, 0, 900, 700);
 }
 
 //генерация первого поколения
@@ -176,15 +212,15 @@ function firstGeneration () {
 }
 
 //кроссинговер или скрещивание
-function crossover(generations, fitness) {
+function crossover(generations) {
 
     //рандомный выбор родителей
-    let ancestor1 = generations[getRandomInt(0, generations.length - 1)];
-    let ancestor2 = generations[getRandomInt(0, generations.length - 1)];
-    
-    // while(ancestor1 == ancestor2) {
-    //     ancestor2 = generations[getRandomInt(0, generations.length - 1)];
-    // }
+    let ancestor1 = generations[getRandomInt(0, generations.length - 1)].way;
+    let ancestor2 = generations[getRandomInt(0, generations.length - 1)].way;
+    while(ancestor1 == ancestor2) {
+        ancestor2 = generations[getRandomInt(0, generations.length - 1)].way;
+    }
+
     //заполняем геном
     let child1 = fillingGenes(ancestor1, ancestor2); 
     let child2 = fillingGenes(ancestor2, ancestor1);
@@ -192,37 +228,36 @@ function crossover(generations, fitness) {
         child2 = fillingGenes(ancestor2, ancestor1);
         // || child2 == ancestor1 || child2 == ancestor2
     }
-    while(child1 == child2) {
-        child1 = fillingGenes(ancestor1, ancestor2);
-        //  || child1 == ancestor1 || child1 == ancestor2
-        // distance(child2) <= Math.min(distance(ancestor1), distance(ancestor2))
-    }
-    allChromosome.push(child1);
-    allChromosome.push(child2);
+    // while(child1 == child2) {
+    //     child1 = fillingGenes(ancestor1, ancestor2);
+    //     //  || child1 == ancestor1 || child1 == ancestor2
+    //     // distance(child2) <= Math.min(distance(ancestor1), distance(ancestor2))
+    // }
     //вычисляем длины путей
     //добавляем потомков в наше поколение, добавляем длины путей(фитнесс)
-    fitness.push(distance(child1));
-    fitness.push(distance(child2));
-    generations.push(child1);
-    generations.push(child2);
+    let temp1 = new Way(child1, distance(child1));
+    let temp2 = new Way(child2, distance(child2));
+    generations.push(temp1);
+    generations.push(temp2);
     //находим 2 наихудшие хромомсомы
-    let indexMax = outputMinIndex(fitness, fitness.length - 1);
-    let indexPreMax = outputMinIndex(fitness, fitness.length - 2);
+    let indexMax = outputMinIndex(generations, generations.length - 1);
+    let indexPreMax = outputMinIndex(generations, generations.length - 2);
     if(indexMax == indexPreMax) {
-        let copy = fitness.slice();
+        let copy = [];
+        for(let i = 0; i < generations.length; i++) {
+            copy.push(generations[i].dist);
+        }
         copy.sort(function(a, b) {
             return a - b;
         });
-        for(let i = 0; i < fitness.length; i++) {
-            if(fitness[i] == copy[fitness.length - 2] && i != indexMax) {
+        for(let i = 0; i < generations.length; i++) {
+            if(generations[i].dist == copy[generations.length - 2] && i != indexMax) {
             indexPreMax = i;
             break;
             }
         }
     }
     //удаляем их из поколения и фитнессов(они сдохли для нас)
-    fitness.splice(Math.max(indexMax, indexPreMax), 1);
-    fitness.splice(Math.min(indexMax, indexPreMax), 1);
     generations.splice(Math.max(indexMax, indexPreMax), 1);
     generations.splice(Math.min(indexPreMax, indexMax), 1);
 }
@@ -230,9 +265,9 @@ function crossover(generations, fitness) {
 //заполняем геном
 function fillingGenes(ancestor1, ancestor2) {
     //выбирая точку разрыва заполняем первый сектор генами родителей
-    let averageGenes = numberOfGenes(ancestor1.length - 2);
-    let child = ancestor1.slice(0, (((ancestor1.length - 2) - averageGenes) / 2) + 1);
-    let i = ((ancestor2.length - 2) - averageGenes) / 2 + 1;
+    let averageGenes = getRandomInt(1, ancestor1.length - 2);
+    let child = ancestor1.slice(0, averageGenes + 1);
+    let i = averageGenes;
     //заполняем гены потомков генами противополжных родителей после точки разрыва
     while(i < ancestor2.length) {
         if(!child.includes(ancestor2[i])){
@@ -241,7 +276,7 @@ function fillingGenes(ancestor1, ancestor2) {
         i++;
     }
     //если хромомсома потомка заполнена не до конца, заполняем генами начального родителя после точки разрыва
-    i = ((ancestor2.length - 2) - averageGenes) / 2 + 1;
+    i = averageGenes; 
     if(child.length != ancestor1.length - 1) {
         while(i < ancestor1.length) {
             if(!child.includes(ancestor1[i])){
@@ -259,28 +294,39 @@ function fillingGenes(ancestor1, ancestor2) {
 //мутация
 function mutation(child) {
     //генерируем число для процентажа мутаций
-    let mutationPercentage1 = 50;
-    let mutationPercentage2 = 20;
+    let mutationPercentage1 = 40;
+    let mutationPercentage2 = 50;
     let number = getRandomInt(0, 100);
-    //генерируем начало и конец реверса
+    
     let index1 = getRandomInt(1, child.length - 2);
     let index2 = getRandomInt(1, child.length - 2);
     while (index1 == index2) {
         index2 = getRandomInt(1, child.length - 2);
     }
-    //делаем реверс куска
-    if(number < mutationPercentage1) {
-        let copy = child.slice(index1, index2 + 1);
-        copy.reverse();
-        let j = index1;
-        for(let i = 0; i < copy.length; i++) {
-            child[j] = copy[i];
-            j++;
-        }
-    }
     //выполянем ее сменой двух любых генов
-    if(number < mutationPercentage2) {
+    if(number < mutationPercentage1) {
         child = swap(child, index1, index2);
+    }
+    //генерируем начало и конец реверса
+    index1 = getRandomInt(1, child.length - 2);
+    index2 = getRandomInt(1, child.length - 2);
+    while (index1 == index2) {
+        index2 = getRandomInt(1, child.length - 2);
+    }
+    if(index2 < index1) {
+        let t = index2;
+        index2 = index1;
+        index1 = t;
+    }
+    //делаем реверс куска
+    if(number < mutationPercentage2) {
+        let j = index2;
+        let copy = child.slice();
+        for(let i = index1; i < (index1 + index2) / 2; i++) {
+            child[i] = copy[j];
+            child[j] = copy[i];
+            j--;
+        }
     }
     return child;
 }
@@ -309,25 +355,17 @@ function shuffle(array) {
     }
 }
 
-//нахождение оптимального(нет) кол-ва хромосом
-function numberOfelement(length) {
-    let fact = 1;
-    if(length <= 3) {
-        return 3;
-    }
-    for(let i = length; i > length - 3; i--){
-        fact *= i;
-    }
-    return fact;
-}
-
 //среднее значение фитнесса
-function averageFitness(distances) {
+function averageFitness(generations) {
     let sumDist = 0;
-    for(let i = 0; i < distances.length; i++) {
-        sumDist += distances[i];
+    let tmp = [];
+    for(let i = 0; i < generations.length; i++) {
+        tmp.push(generations[i].dist);
     }
-    return sumDist / distances.length;
+    for(let i = 0; i < tmp.length; i++) {
+        sumDist += tmp[i];
+    }
+    return sumDist / tmp.length;
 }
 
 //рандом
@@ -335,7 +373,7 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-  }
+}
 
 //выбор кол-ва генов для кроссинговера
 function numberOfGenes(lengthOfChromosome) {
@@ -358,13 +396,15 @@ function swap(array, i, j) {
 
 //ищем минимальный путь а вернее его индекс
 function outputMinIndex(array, index) {
-    let copy = array.slice();
-    let minIndex;  
-    copy.sort(function(a, b) {
+    let tmp = [];
+    for(let i = 0; i < array.length; i++) {
+        tmp.push(array[i].dist);
+    }
+    tmp.sort(function(a, b) {
         return a - b;
     });
     for(let i = 0; i < array.length; i++) {
-        if(array[i] == copy[index]) {
+        if(array[i].dist == tmp[index]) {
             minIndex = i;
             break;
         }
