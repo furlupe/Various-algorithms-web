@@ -133,7 +133,13 @@ async function antAlgorithm() {
             way.push(way[0]);
             let temp = new Way(way, distance(way));
             if(minWay == undefined || temp.dist < minWay.dist) {
+                if(minWay != undefined){
+                    let table = document.querySelector('table');
+                    document.querySelector('.thead').style.display  = 'none';
+                    table.parentNode.removeChild(table);
+                }
                 minWay = temp;
+                output(minWay, false);
                 await new Promise((resolve, reject) => setTimeout(resolve, 200));
                 clear(context1);
                 // await new Promise((resolve, reject) => setTimeout(resolve, 100));
@@ -147,24 +153,62 @@ async function antAlgorithm() {
         ways = [];
         repeat+=1;
     }
-    let outputFitness = [];
-    let outputId = [];
-    let temp = minWay.way.slice(minWay.way.findIndex(i => i == points[0]));
-    for(let i = 1; i <= minWay.way.findIndex(i => i == points[0]); i++) {
-        temp.push(minWay.way[i]);
-    }
-    console.log(temp);
-    outputId = temp;
-    outputFitness = minWay.dist;
+    // console.log(temp);
+    let table = document.querySelector('table');
+    document.querySelector('.thead').style.display  = 'none';
+    table.parentNode.removeChild(table);
+    output(minWay, true);
     clear(context1);
     drawLine(minWay);
     // console.log(tempWay[outputMinIndex(tempWay)].dist);
     //вывод
-    let result = [];
-    for (let i=0; i<outputId.length; i++){
-        result.push(outputId.map(elem => elem.id).join(" "));
+    // let result = [];
+    // for (let i=0; i<outputId.length; i++){
+    //     result.push(outputId.map(elem => elem.id).join(" "));
+    // }
+    // let floorFitness = Math.round(outputFitness);
+    // let arr =[]
+    // arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness }))
+    // console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness })))
+
+    // let table = document.createElement('table');
+    // let tbody = document.createElement('tbody');
+    // table.appendChild(tbody);
+    // document.getElementById('output').appendChild(table);
+    // document.querySelector('.thead').style.display  = 'block';
+    // // for (let ind of arr)  {
+
+    //     let tr = document.createElement('tr');
+
+    //     // let td1 = document.createElement('td');
+    //     // // td1.innerHTML = arr.indexOf(ind)+1;
+    //     // tr.appendChild(td1);
+
+    //     let td2 = document.createElement('td');
+    //     td2.innerHTML = result[0];
+    //     tr.appendChild(td2);
+    
+    //     let td3 = document.createElement('td');
+    //     td3.innerHTML = floorFitness;
+    //     tr.appendChild(td3);
+
+    //     tbody.appendChild(tr);
+    // // }
+}
+
+function output(way, flag) {
+    let temp = way.way.slice(way.way.findIndex(i => i == points[0]));
+    for(let i = 1; i <= way.way.findIndex(i => i == points[0]); i++) {
+        temp.push(way.way[i]);
     }
-    let floorFitness = Math.round(outputFitness);
+    let result = [];
+    for (let i=0; i<temp.length; i++){
+        result.push(temp.map(elem => elem.id).join(" "));
+    }
+    // let floorFitness = [];
+    // for(let i = 0; i < way.dist.length; i++) {
+    let floorFitness = Math.round(way.dist);
+    // }
     let arr =[]
     arr=result.map((x, i) => ({ result: result[i], floorFitness: floorFitness }))
     console.table(result.map((x, i) => ({ result: result[i], floorFitness: floorFitness })))
@@ -179,11 +223,14 @@ async function antAlgorithm() {
         let tr = document.createElement('tr');
 
         // let td1 = document.createElement('td');
-        // // td1.innerHTML = arr.indexOf(ind)+1;
+        // td1.innerHTML = arr.indexOf(ind)+1;
         // tr.appendChild(td1);
 
         let td2 = document.createElement('td');
         td2.innerHTML = result[0];
+        if(flag == true) {
+            td2.innerHTML = 'WIN ' + result[0];
+        }
         tr.appendChild(td2);
     
         let td3 = document.createElement('td');
@@ -191,7 +238,6 @@ async function antAlgorithm() {
         tr.appendChild(td3);
 
         tbody.appendChild(tr);
-    // }
 }
 
 function distCheck(array, way) {
