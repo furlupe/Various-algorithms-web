@@ -1,0 +1,437 @@
+@font-face {
+    font-family: Genshin;
+    src: url("additionFiles/Genshin_Impact.ttf");
+}
+
+p{
+    position: absolute;
+    font-family: Genshin;
+    width: 540px;
+    font-size: 30px;
+    top: 50%;
+    margin-top: -0.625em;
+    left: 90px;
+}
+
+body {
+    background-image: url("additionFiles/geo_theme.png");
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+}
+
+/* стили для ячеек таблицы */
+table {
+    position: absolute;
+    background-color: white;
+    width: 700px;
+    height: 700px;
+    left: 10px;
+    top: 10px;
+    border-collapse: collapse;
+}
+
+td[data-mode = "empty"] {
+    background-color: #FFFFFF;
+}
+
+td[data-mode = "wall"] {
+    background-color: #000000;
+}
+
+td[data-mode = "start"] {
+    background-color: #FF0000;
+}
+
+td[data-mode = "finish"] {
+    background-color: #00FF00;
+}
+
+td[data-mode = "path"] {
+    background-color: blue;
+}
+
+td[data-mode = "checking"] {
+    background-color: aquamarine;
+}
+
+td:hover {
+    opacity: 0.5;
+}
+
+td[data-mode = "empty"]:hover {
+    background-color: lightgray;
+}
+
+
+/* стили различных кнопок */
+button {
+    position: absolute;
+    font-family: Genshin;
+    font-size: 20px;
+    text-align: center;
+    background-color: #EAD5B6;
+    color: black;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    border-radius: 20px;
+}
+
+button:disabled, button:hover {
+    opacity: 0.5;
+}
+
+#acceptChangesButton {
+    width: 170px;
+    height: 170px;
+    left: 10px;
+    top: 10px;
+}
+
+#primmButton {
+    width: 700px;
+    height: 50px;
+    left: 10px;
+    top: calc(700px + 20px);
+}
+
+#pathChangeButton {
+    width: 170px;
+    height: 170px;
+    left: 190px;
+    top: 10px;
+}
+
+#pathSearchButton {
+    width: 170px;
+    height: 170px;
+    left: 370px;
+    top: 10px;
+}
+
+
+/* стили div'ов */
+div {
+    position: absolute;
+    border-radius: 20px;
+    background-color: #FFFACD;
+}
+
+#titleTheme {
+    left: calc((1920px - 700px)/2);
+    height: 60px;
+    width: 720px;
+    border: 1px solid;
+}
+
+#inputTheme {
+    left: 20px;
+    top: calc((955px - 700px)/2 - 50px);
+    height: calc(700px + 90px);
+    width: calc((1920px - 700px)/2 - 40px);
+    border: 1px solid;
+}
+
+#inputTheme img {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.20;
+}
+
+#tableTheme {
+    top: calc((955px - 700px)/2 - 50px);
+    left: calc((1920px - 700px)/2);
+    width: 720px;
+    height: calc(700px + 90px);
+    border: 1px solid;
+}
+
+#pathbuttonsTheme {
+    top: calc((955px - 700px)/2 - 50px);
+    left: calc((1920px + 700px)/2 + 40px);
+    width: 550px;
+    height: calc(700px + 90px);
+    border: 1px solid;
+    text-align: center;
+}
+
+#pathbuttonsTheme img {
+    position: absolute;
+    left: 167px;
+    top: 217px;
+}
+
+#pathbuttonsTheme input {
+    width: 530px;
+    height: 0.5rem;
+    left: 275px;
+    top: 200px;
+    background-color: #EAD5B6;
+}
+
+#pathbuttonsTheme input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #EAD5B6;
+    width: 30px;
+    height: 30px;
+    border: 5px solid black;
+    border-radius: 20px;
+    margin-top: -6px;
+}
+
+#pathbuttonsTheme input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #EAD5B6;
+    border-radius: 20px;
+    height: 17px;
+}
+
+#pathbuttonsTheme input[type="range"]::-moz-range-track {
+    background: #EAD5B6;
+    border-radius: 20px;
+}
+
+#pathbuttonsTheme input[type="range"]::-moz-range-thumb {
+    background-color: #EAD5B6;
+    width: 20px;
+    height: 20px;
+    border: 5px solid black;
+    border-radius: 20px;
+}
+
+#pathbuttonsTheme label {
+    position: absolute;
+    font-family: Genshin;
+    font-size: 20px;
+    text-align: center;
+    width: 265px;
+    left: 148px;
+    top: 220px;
+}
+
+/* стили input'ов */
+input {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    text-align: center;
+    font-size: 80px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* стили стрелок для input + анимации */
+.arrow {
+    cursor: pointer;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-top: 10px solid #CFB694;
+    border-right: 10px solid #CFB694;
+    margin-right: 60px;
+    background-color: rgba(0,0,0,0);
+}
+
+.arrow::before {
+    content: "";
+    cursor: pointer;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-top: 10px solid #EAD5B6;
+    border-right: 10px solid #EAD5B6;
+    margin-top: 5px;
+    margin-left: 25px;
+}
+
+.arrow-increase {
+    left: 245px;
+    top: 180px;
+    transform: rotate(-45deg);
+    animation: arrowIncDef 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-increase:hover {
+    animation: arrowIncHover 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-decrease {
+    left: 245px;
+    top: 520px;
+    transform: rotate(135deg);
+    animation: arrowDecDef 50ms;
+    animation-fill-mode: forwards;
+}
+
+.arrow-decrease:hover {
+    animation: arrowDecHover 125ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes arrowIncHover {
+    from {
+        transform: scale(1.0) rotate(-45deg);
+    }
+    10% {
+        transform: scale(1.02) rotate(-45deg);
+    }
+    20% {
+        transform: scale(1.04) rotate(-45deg);
+    }
+    30% {
+        transform: scale(1.06) rotate(-45deg);
+    }
+    40% {
+        transform: scale(1.08) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-45deg);
+    }
+    60% {
+        transform: scale(1.12) rotate(-45deg);
+    }
+    70% {
+        transform: scale(1.14) rotate(-45deg);
+    }
+    80% {
+        transform: scale(1.16) rotate(-45deg);
+    }
+    90% {
+        transform: scale(1.18) rotate(-45deg);
+    }
+    to {
+        transform: scale(1.2) rotate(-45deg);
+    }
+
+}
+@keyframes arrowIncDef {
+    from {
+        transform: scale(1.2) rotate(-45deg);
+    }
+    10% {
+        transform: scale(1.18) rotate(-45deg);
+    }
+    20% {
+        transform: scale(1.16) rotate(-45deg);
+    }
+    30% {
+        transform: scale(1.14) rotate(-45deg);
+    }
+    40% {
+        transform: scale(1.12) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-45deg);
+    }
+    60% {
+        transform: scale(1.08) rotate(-45deg);
+    }
+    70% {
+        transform: scale(1.06) rotate(-45deg);
+    }
+    80% {
+        transform: scale(1.04) rotate(-45deg);
+    }
+    90% {
+        transform: scale(1.02) rotate(-45deg);
+    }
+    to {
+        transform: scale(1.0) rotate(-45deg);
+    }
+}
+
+@keyframes arrowDecHover {
+    from {
+        transform: scale(1.0) rotate(135deg);
+    }
+    10% {
+        transform: scale(1.02) rotate(135deg);
+    }
+    20% {
+        transform: scale(1.04) rotate(135deg);
+    }
+    30% {
+        transform: scale(1.06) rotate(135deg);
+    }
+    40% {
+        transform: scale(1.08) rotate(135deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(135deg);
+    }
+    60% {
+        transform: scale(1.12) rotate(135deg);
+    }
+    70% {
+        transform: scale(1.14) rotate(135deg);
+    }
+    80% {
+        transform: scale(1.16) rotate(135deg);
+    }
+    90% {
+        transform: scale(1.18) rotate(135deg);
+    }
+    to {
+        transform: scale(1.2) rotate(135deg);
+    }
+
+}
+@keyframes arrowDecDef {
+    from {
+        transform: scale(1.2) rotate(135deg);
+    }
+    10% {
+        transform: scale(1.18) rotate(135deg);
+    }
+    20% {
+        transform: scale(1.16) rotate(135deg);
+    }
+    30% {
+        transform: scale(1.14) rotate(135deg);
+    }
+    40% {
+        transform: scale(1.12) rotate(135deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(135deg);
+    }
+    60% {
+        transform: scale(1.08) rotate(135deg);
+    }
+    70% {
+        transform: scale(1.06) rotate(135deg);
+    }
+    80% {
+        transform: scale(1.04) rotate(135deg);
+    }
+    90% {
+        transform: scale(1.02) rotate(135deg);
+    }
+    to {
+        transform: scale(1.0) rotate(135deg);
+    }
+}
+
+@keyframes noelle-move {
+    from {
+        transform: translate(0, 0);
+    }
+}
