@@ -8,17 +8,14 @@
 
     <body>
         <div class="canvas">
-            <canvas id="myCanvas" width="400" height="400" style=
-            "background-color: #eee; 
-            border: 2px solid black;
-            margin: 10px;">
+            <canvas id="myCanvas" width="400" height="400">
             Sorry bro, no canvas for you :(
             </canvas>
 
             <label class="clsname">Метод кластеризации: K_Means++</label> </br>
 
             <div class="controls">
-                <label id="distances">Расстояние (для всех методов): 
+                <label id="distances">Расстояние: 
                     <select id="distanceBox">
                         <option value="Euclidian" selected>Евклидово</option>
                         <option value="Manchattan">Манхэттенское</option>
@@ -26,7 +23,7 @@
                     </select>
                 </label> </br>
                 
-                <label>Выберите количество кластеров для K-Means++:
+                <label id="count">Выберите количество кластеров для K-Means++:
                     <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
                 </label> </br>
 
@@ -37,10 +34,7 @@
         </div>
 
         <div class="canvas">
-            <canvas id="myCanvas2" width="400" height="400" style=
-            "background-color: #eee; 
-            border: 2px solid black;
-            margin: 10px;">
+            <canvas id="myCanvas2" width="400" height="400">
             Sorry bro, no canvas for you :(
             </canvas>
 
@@ -48,18 +42,15 @@
         </div>
         
         <div class="canvas">
-            <canvas id="myCanvas3" width="400" height="400" style=
-            "background-color: #eee; 
-            border: 2px solid black;
-            margin: 10px;">
+            <canvas id="myCanvas3" width="400" height="400">
             Sorry bro, no canvas for you :(
             </canvas>
 
             <label class="clsname">Метод кластеризации: DBSCAN</label> <br>
 
             <div class="controls">
-                <label> Выберите значение для eps:
-                    <input id="labEps" type="number" autofocus step="5" min="25" max="120" value="25">
+                <label id="eps"> Выберите значение для eps:
+                    <input id="labEps" type="number" autofocus step="5" min="25" max="120" value="100">
                 </label>
             </div>
         </div>
