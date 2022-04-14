@@ -102,9 +102,10 @@ K_Means.prototype.DrawDots = function(){
 //Рисуем
 K_Means.prototype.Draw = function(){
     this.ctx.fillStyle='rgba(0, 0, 0, 0)';
-    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.clearRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
+        console.log(i);
         let part = i*23;
         let color='hsl('+part+', 80%, 50%)';
         this.DrawClusters(this.clusters[i], color);
@@ -232,10 +233,9 @@ MeanShift.prototype.DrawDots = function(){
 //Рисуем
 MeanShift.prototype.Draw = function(){
     this.ctx2.fillStyle='rgba(0, 0, 0, 0)';
-    this.ctx2.fillRect(0, 0, this.width, this.height);
+    this.ctx2.clearRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
-        console.log(this.clusters[i]);
         let part = i*23;
         let color='hsl('+part+', 80%, 50%)';
         this.DrawClusters(this.clusters[i], color);
@@ -379,7 +379,7 @@ DBSCAN.prototype.DrawDots = function(){
 //Рисуем
 DBSCAN.prototype.Draw = function(){
     this.ctx3.fillStyle='rgba(0, 0, 0, 0)';
-    this.ctx3.fillRect(0, 0, this.width, this.height);
+    this.ctx3.clearRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
         let part = i*23;
