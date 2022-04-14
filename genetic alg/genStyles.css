@@ -1,0 +1,114 @@
+html{
+    background: url(./genImg/ayaka.jpg) no-repeat;
+    background-size: cover;
+    /* background-size: auto; */
+    background-color: rgb(95,134,199);
+    position: relative;
+}
+#canvas1{
+    position: absolute;
+    margin: 25px;
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    background-size: 60%;
+    background: url(./genImg/krio-removebg-preview.png) center no-repeat;
+    background-color: rgb(114, 177, 250);
+}
+#canvas2{
+    margin: 25px;
+    border-radius: 12px;
+    position: absolute;
+    background-color: rgba(240, 248, 255, 0);
+}
+.btn button{
+    display: inline-block;
+    border: none;
+    outline: none;
+    padding: 1.2rem 2rem;
+    cursor: pointer;
+    user-select: none;
+    margin: 25px;
+    font-size: 30px;
+    font-family: "Genshin Impact";
+    border-radius: 12px;
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
+    background: url(./genImg/krio-removebg-preview.png) center no-repeat;
+    background-size: 12%;
+    background-position: 5px;   
+    background-color: rgb(114, 177, 250);
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+#Erase{
+    padding: 1.2rem 3.5rem;
+    background: url(./genImg/ult.png) center no-repeat;
+    padding-left: 86px;
+    background-size: 27%;
+    background-position: 5px;
+}
+#Result,#Erase{ 
+    background-color: rgb(114, 177, 250);
+    color: black;
+}
+#Result:hover,#Erase:hover{
+    background-color: rgb(41,43,118);
+    color: white;
+}
+#Result{
+    background-size: 12%; 
+    background-position: 5px; 
+    padding-left: 70px; 
+}
+body {
+    font-size: 25px;
+    font-family: "Genshin Impact";
+}
+table {
+    position: absolute;
+    font-size: 20px;
+    color: black;
+    margin: 10px; 
+    background-color: rgba(250, 219, 219, 0);
+    /* border-collapse: collapse; */
+    /* border: 1px solid black; */
+    border-radius: 6px;
+}
+.blockBody{
+    display: inline-block;
+}
+thead{
+    display: inline-block;
+} 
+td, tr {
+    text-align: center;
+    /* border: 1px solid black; */
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgb(250, 219, 219);
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
+}
+
+#output {
+    margin-left: 1000px;
+    color: black;
+    /* padding: 1.2rem 3rem; */
+    text-align: center;
+}
+.thead{
+    display: none;
+    color: rgb(0, 0, 0);
+    background-color: pink;
+    border-radius: 8px;
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
+    font-size: 30px;
+    padding: 5px 4.5rem;
+}
+h1{
+    text-align: center;
+}
+@font-face {
+    font-family: "Genshin Impact"; 
+    src: url("./genFont/Genshin_Impact.ttf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+} 
