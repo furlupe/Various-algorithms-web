@@ -14,6 +14,7 @@ algorithm.js
 .idea/**/dictionaries
 .idea/**/shelf
 .idea/discord.xml
+.idea
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -44,6 +45,9 @@ algorithm.js
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
+# .idea/discord.xml
+# .idea/vcs.xml
+# .idea/workspace.xml
 # *.iml
 # *.ipr
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="clustering.css" type="text/css">
+        <h1 class="header">Кластеризация</h1>
+    </head>
+
+    <body>
+        <div class="canvas">
+            <canvas id="myCanvas" width="400" height="400" style=
+            "background-color: #eee; 
+            border: 2px solid black;
+            margin: 10px;">
+            Sorry bro, no canvas for you :(
+            </canvas>
+
+            <label class="clsname">Метод кластеризации: K_Means++</label> </br>
+
+            <div class="controls">
+                <label id="distances">Расстояние (для всех методов): 
+                    <select id="distanceBox">
+                        <option value="Euclidian" selected>Евклидово</option>
+                        <option value="Manchattan">Манхэттенское</option>
+                        <option value="Chebichev">Чебышева</option>
+                    </select>
+                </label> </br>
+                
+                <label>Выберите количество кластеров для K-Means++:
+                    <input id="labCount" type="number" autofocus step="1" min="1" max="1" value="1">
+                </label> </br>
+
+                <button id="clustButton" type="button">Кластеризация</button>
+                <button id="clearButton" type="button" onclick="ButtonClearCanvas()">Очистить поле</button>
+            </div>
+            
+        </div>
+
+        <div class="canvas">
+            <canvas id="myCanvas2" width="400" height="400" style=
+            "background-color: #eee; 
+            border: 2px solid black;
+            margin: 10px;">
+            Sorry bro, no canvas for you :(
+            </canvas>
+
+            <label class="clsname">Метод кластеризации: MeanShift</label> </br>
+        </div>
+        
+        <div class="canvas">
+            <canvas id="myCanvas3" width="400" height="400" style=
+            "background-color: #eee; 
+            border: 2px solid black;
+            margin: 10px;">
+            Sorry bro, no canvas for you :(
+            </canvas>
+
+            <label class="clsname">Метод кластеризации: DBSCAN</label> <br>
+
+            <div class="controls">
+                <label> Выберите значение для eps:
+                    <input id="labEps" type="number" autofocus step="5" min="25" max="120" value="25">
+                </label>
+            </div>
+        </div>
+    </body>
+    <script src="clustering.js"></script>
+</html>
