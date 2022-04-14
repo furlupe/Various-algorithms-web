@@ -101,7 +101,7 @@ K_Means.prototype.DrawDots = function(){
 }
 //Рисуем
 K_Means.prototype.Draw = function(){
-    this.ctx.fillStyle='#eee';
+    this.ctx.fillStyle='rgba(0, 0, 0, 0)';
     this.ctx.fillRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
@@ -231,7 +231,7 @@ MeanShift.prototype.DrawDots = function(){
 }
 //Рисуем
 MeanShift.prototype.Draw = function(){
-    this.ctx2.fillStyle='#eee';
+    this.ctx2.fillStyle='rgba(0, 0, 0, 0)';
     this.ctx2.fillRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
@@ -378,7 +378,7 @@ DBSCAN.prototype.DrawDots = function(){
 }
 //Рисуем
 DBSCAN.prototype.Draw = function(){
-    this.ctx3.fillStyle='#eee';
+    this.ctx3.fillStyle='rgba(0, 0, 0, 0)';
     this.ctx3.fillRect(0, 0, this.width, this.height);
     this.DrawDots();
     for(let i = 0; i < this.clusters.length; i++){
