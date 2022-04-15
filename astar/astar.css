@@ -95,7 +95,7 @@ td[data-mode = "empty"]:hover {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #fcf8da;
     min-width: 160px;
     z-index: 1;
 }
@@ -108,7 +108,7 @@ td[data-mode = "empty"]:hover {
 }
 
 .dropdown-content a:hover {
-    background-color: #ddd
+    opacity: 0.5;
 }
 
 .dropdown:hover .dropdown-content {
