@@ -8,11 +8,25 @@
 p{
     position: absolute;
     font-family: Genshin;
-    /* width: 540px; */
     font-size: 32px;
+}
+
+#p-title {
     top: 50%;
     margin-top: -0.625em;
     left: 70px;
+}
+
+a {
+    font-family: Genshin;
+    font-size: 16px;
+}
+
+#down {
+    position: absolute;
+    font-size: 32px;
+    top: 12px;
+    left: 15px;
 }
 
 body {
@@ -67,16 +81,65 @@ td[data-mode = "empty"]:hover {
 }
 
 
+/* выпадающее меню */
+.dropdown {
+    position: absolute;
+    display: inline-block;
+    width: 225px;
+    height: 60px;
+
+    left: 20px;
+    top: 30px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.btn:hover, .dropdown:hover .btn  {
+    background-color: #0b7dda;
+}
+
 /* стили различных кнопок */
 button {
+    cursor: pointer;
     position: absolute;
+    width: 170px;
+    height: 170px;
+
     font-family: Genshin;
     font-size: 20px;
+
     text-align: center;
+
     background-color: #cea573;
     color: black;
+
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+
+    border: none;
     border-radius: 20px;
+
+    top: 10px;
 }
 
 button:disabled, button:hover {
@@ -84,11 +147,7 @@ button:disabled, button:hover {
 }
 
 #acceptChangesButton {
-    width: 170px;
-    height: 170px;
     left: 10px;
-    top: 10px;
-    border: none;
 }
 
 #primmButton {
@@ -96,42 +155,32 @@ button:disabled, button:hover {
     height: 50px;
     left: 10px;
     top: calc(700px + 20px);
-    border: none;
-    border-radius: 12px;
 }
 
 #pathChangeButton {
-    width: 170px;
-    height: 170px;
     left: 190px;
-    top: 10px;
-    border: none;
 }
 
 #pathSearchButton {
-    width: 170px;
-    height: 170px;
     left: 370px;
-    top: 10px;
-    border: none;
 }
-
 
 /* стили div'ов */
 div {
     position: absolute;
+
     border-radius: 20px;
+    border: none;
+
     background-color: #fcf8da;
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
 }
 
 #titleTheme {
     left: calc((1920px - 700px)/2 );
     height: 60px;
     width: 720px;
-    border: none;
     top: 30px;
-    border-radius: 16px;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
 }
 
 #inputTheme {
@@ -139,17 +188,17 @@ div {
     top: 110px;
     height: calc(700px + 90px);
     width: calc((1920px - 700px)/2 - 40px);
-    border: none;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
 }
 
 #inputTheme img {
     width: 300px;
     height: 300px;
     position: absolute;
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     opacity: 0.40;
 }
 
@@ -158,8 +207,6 @@ div {
     left: calc((1920px - 700px)/2);
     width: 720px;
     height: calc(700px + 90px);
-    border: none;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
 }
 
 #pathbuttonsTheme {
@@ -167,9 +214,7 @@ div {
     left: calc((1920px + 700px)/2 + 40px);
     width: 550px;
     height: calc(700px + 90px);
-    border: none;
     text-align: center;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
 }
 
 #pathbuttonsTheme img {
@@ -184,6 +229,7 @@ div {
     left: 275px;
     top: 200px;
     background-color: #EAD5B6;
+    cursor: pointer;
 }
 
 #pathbuttonsTheme input[type="range"]::-webkit-slider-thumb {
@@ -191,7 +237,6 @@ div {
     background-color: #EAD5B6;
     width: 30px;
     height: 30px;
-    border: none;
     border-radius: 20px;
     margin-top: -6px;
 }
@@ -211,7 +256,6 @@ div {
     background-color: #EAD5B6;
     width: 20px;
     height: 20px;
-    border: none;
     border-radius: 20px;
 }
 
@@ -230,12 +274,17 @@ input {
     position: absolute;
     top: 50%;
     left: 50%;
+
     transform: translate(-50%, -50%);
+
     width: 250px;
     height: 250px;
+
     text-align: center;
     font-size: 80px;
+
     background-color: rgba(0, 0, 0, 0);
+
     border-radius: 13px;
     border-color: #ead5b6;
 }
@@ -261,11 +310,11 @@ input[type=number]::-webkit-outer-spin-button {
     border-right: 10px solid #CFB694;
     margin-right: 60px;
     background-color: rgba(0,0,0,0);
+    box-shadow: 0px 0px 0px rgba(0,0,0,0);
 }
 
 .arrow::before {
     content: "";
-    cursor: pointer;
     position: absolute;
     width: 40px;
     height: 40px;
