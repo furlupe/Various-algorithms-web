@@ -1,7 +1,6 @@
 html{
     background: url(./genImg/ayaka.jpg) no-repeat;
     background-size: cover;
-    /* background-size: auto; */
     background-color: rgb(95,134,199);
     position: relative;
 }
@@ -14,12 +13,14 @@ html{
     background: url(./genImg/krio-removebg-preview.png) center no-repeat;
     background-color: rgb(114, 177, 250);
 }
+
 #canvas2{
     margin: 25px;
     border-radius: 12px;
     position: absolute;
     background-color: rgba(240, 248, 255, 0);
 }
+
 .btn button{
     display: inline-block;
     border: none;
@@ -40,6 +41,7 @@ html{
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
+
 #Erase{
     padding: 1.2rem 3.5rem;
     background: url(./genImg/ult.png) center no-repeat;
@@ -47,6 +49,7 @@ html{
     background-size: 27%;
     background-position: 5px;
 }
+
 #drop{
     padding: 1.2rem 2rem;
     padding-left: 70px;
@@ -65,34 +68,38 @@ html{
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
+
 .down{
     font-family: "Genshin Impact";
 }
+
 #Result,#Erase, #drop{ 
     background-color: rgb(114, 177, 250);
     color: black;
 }
+
 #Result:hover,#Erase:hover, #drop:hover, .dropdown-content a:hover{
     background-color: rgb(41,43,118);
     color: white;
 }
+
 #Result{
     background-size: 12%; 
     background-position: 5px; 
     padding-left: 70px; 
 }
+
 body {
     font-size: 25px;
     font-family: "Genshin Impact";
 }
+
 table {
     position: absolute;
     font-size: 20px;
     color: black;
     margin: 10px; 
     background-color: rgba(250, 219, 219, 0);
-    /* border-collapse: collapse; */
-    /* border: 1px solid black; */
     border-radius: 6px;
 }
 .blockBody{
@@ -114,7 +121,6 @@ td, tr {
 #output {
     margin-left: 1000px;
     color: black;
-    /* padding: 1.2rem 3rem; */
     text-align: center;
 }
 .thead{
@@ -158,9 +164,11 @@ h1{
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
 @font-face {
     font-family: "Genshin Impact"; 
     src: url("./genFont/Genshin_Impact.ttf") format("truetype"); 

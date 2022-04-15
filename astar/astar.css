@@ -97,6 +97,7 @@ td[data-mode = "empty"]:hover {
     position: absolute;
     background-color: #fcf8da;
     min-width: 160px;
+    margin-top: 60px;
     z-index: 1;
 }
 
@@ -113,10 +114,6 @@ td[data-mode = "empty"]:hover {
 
 .dropdown:hover .dropdown-content {
     display: block;
-}
-
-.btn:hover, .dropdown:hover .btn  {
-    background-color: #0b7dda;
 }
 
 
