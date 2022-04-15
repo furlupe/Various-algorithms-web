@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./genStyles.css">
-    <h1>Генетический алгоритм</h1>
+    <div>
+        <div class="dropdown">
+            <button class="btn" type="button" id="drop">
+                <a class="down">Алгоритмы</a>
+            </button>
+            <div class="dropdown-content">
+                <a href="../astar/astar.html">A*</a>
+                <a href="../ClusteringFiles/clustering.html">Кластеризация</a>
+                <a href="../ant alg/ant_algorithm.html">Муравьиный алгоритм</a>
+                <a href="../network/network.html">Нейронная сеть</a>
+            </div>
+        </div>
+        <h1>Генетический алгоритм</h1>
+    </div>
 </head>
 <body>  
+    
     <div class="btn">
         <button onclick="geneticAlgorithm();" type="button" id="Result">Рассчитать кратчайший путь</button>
         <button onclick="erase();" type="button" id="Erase">Стереть</button>
