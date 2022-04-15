@@ -23,7 +23,7 @@ class Point {
     inUse = 0;
 }
 
-// ничего делать n миллисекунд
+// ничего не делать n миллисекунд
 function sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
@@ -315,9 +315,6 @@ function acceptChanges() {
     table.removeEventListener("click", createWall); // перестать делать стены по нажатию на ячейку
     table.addEventListener("click", createTargets); // начать ставить цели
 
-    //document.getElementById("acceptChangesButton").style.display = "none"; // скрыть кнопку ПРИМЕНИТЬ
-    //document.getElementById("makeChangesButton").style.display = ""; // отобразить кнопку ИЗМЕНИТЬ
-
     document.getElementById("acceptChangesButton").innerHTML = "Изменить лабиринт";
     document.getElementById("acceptChangesButton").onclick = makeChanges;
 
@@ -333,9 +330,6 @@ function makeChanges() {
     var table = document.getElementById("lab");
     table.removeEventListener("click", createTargets); // перестать делать цели по нажатию на ячейку
     table.addEventListener("click", createWall); // начать ставить стены
-
-    //document.getElementById("acceptChangesButton").style.display = "";
-    //document.getElementById("makeChangesButton").style.display = "none";
 
     document.getElementById("acceptChangesButton").innerHTML = "Применить изменения";
     document.getElementById("acceptChangesButton").onclick = acceptChanges;
