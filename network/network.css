@@ -8,6 +8,59 @@ body {
 }
 
 
+a {
+    font-family: Genshin;
+    font-size: 16px;
+}
+
+#down {
+    position: absolute;
+    font-size: 32px;
+    top: 12px;
+    left: 15px;
+}
+
+
+/* выпадающее меню */
+.dropdown {
+    background-color: #E5FAFF;
+    display: inline-block;
+    width: 225px;
+    height: 60px;
+
+    left: 20px;
+    top: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: -1px;
+    background-color: #E5FAFF;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    opacity: 0.5;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.btn:hover, .dropdown:hover .btn  {
+    background-color: #0b7dda;
+}
+
+
 /* слова */
 label {
     position: absolute;
@@ -42,11 +95,17 @@ label {
 /* стили кнопок */
 button {
     position: absolute;
+
     font-family: Genshin;
     font-size: 20px;
     text-align: center;
+
     background-color: #EFE6CE;
     color: black;
+
+    width: 180px;
+    height: 60px;
+
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
     border-radius: 20px;
 }
@@ -56,15 +115,11 @@ button:hover{
 }
 
 #clear {
-    width: 180px;
-    height: 60px;
     top: 10px;
     left: 10px;
 }
 
 #determine {
-    width: 180px;
-    height: 60px;
     left: 10px;
     top: calc(70px + 140px + 20px);
 }
@@ -75,12 +130,14 @@ div {
     position: absolute;
     border-radius: 20px;
     top: 80px;
+    border: 1px solid;
 }
 
 #todrawin {
     left: calc((1920px - 200px) / 2);
     width: 200px;
     height: 500px;
+    border: 0px solid;
 }
 
 #answer {
@@ -114,20 +171,21 @@ div {
     left: calc((1920px - 700px)/2);
     height: 60px;
     width: 720px;
-    border: 1px solid;
     text-align: center;
 }
 
 
 /* картиночки */
-#barbara {
+img {
     position: absolute;
+}
+
+#barbara {
     top: 558px;
     left: calc((1920px - 200px) / 2 + 30px);
 }
 
 #razor {
-    position: absolute;
     top: 370px;
     left: 350px
 }
