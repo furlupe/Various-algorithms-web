@@ -2,43 +2,59 @@ html{
     background: url(./antImg/minxiao.png) no-repeat;
     background-size: 73%;
     background-position: 170% 0%;
-    /* background-position:right; */
-    /* background-size: auto; */
     background-color: rgb(198,231,251);
 }
-#canvas1{
+
+body {
+    font-size: 25px;
+    font-family: "Genshin Impact";
+}
+
+canvas {
     position: absolute;
     margin: 25px;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     border-radius: 12px;
+}
+
+#canvas1{
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     background-size: 60%;
     background: url(./antImg/Element_Anemo.png) center no-repeat;
     background-color: rgb(58, 131, 127);
 }
+
 #canvas2 {
-    margin: 25px;
-    border-radius: 12px;
-    position: absolute;
     background-color: rgba(240, 248, 255, 0);
 }
+
 .btn button{
     display: inline-block;
+
     border: none;
     outline: none;
+
     padding: 1.2rem 2rem;
+
     cursor: pointer;
     user-select: none;
+
     margin: 25px;
     margin-bottom: -100px;
+
     font-size: 30px;
     font-family: "Genshin Impact";
+
     border-radius: 12px;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
+
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
+
     background: url(./antImg/Element_Anemo.png) center no-repeat;
     background-color: rgb(58, 131, 127);
+
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
+
 #Erase{
     padding: 1.2rem 3.5rem;
     background: url(./antImg/t03_burst_BaneofAllEvil.png) center no-repeat;
@@ -46,6 +62,7 @@ html{
     background-size: 27%;
     background-position: 5px;
 }
+
 #drop{
     padding: 1.2rem 2rem;
     padding-left: 70px;
@@ -59,54 +76,50 @@ html{
     font-size: 30px;
     font-family: "Genshin Impact";
     border-radius: 12px;
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);  
-    /* background: url(./genImg/krio-removebg-preview.png) center no-repeat;
-    background-size: 12%;
-    background-position: 5px;    */
+    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     background-color: rgb(114, 177, 250);
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
+
 .down{
     font-family: "Genshin Impact";
 }
-#Result,#Erase, #drop{ 
+
+#Result,#Erase, #drop{
     background-color: rgb(58, 131, 127);
     color: black;
 }
+
 #Result:hover,#Erase:hover, #drop:hover, .dropdown-content a:hover{
     background-color: rgb(14, 78, 76);
     color: white;
 }
+
 #Result{
     background-size: 12%; 
     background-position: 5px; 
     padding-left: 70px; 
 }
 
-body {
-    font-size: 25px;
-    font-family: "Genshin Impact";
-}
 table {
     font-size: 25px;
     color: black;
     margin: 10px; 
     background-color: rgba(250, 219, 219, 0);
-    /* border-collapse: collapse; */
-    /* border: 1px solid black; */
     border-radius: 6px;
 }
+
 .blockBody{
     display: flex;
     margin-top: 20px;
 }
+
 thead{
     display: inline-block;
-} 
+}
 td, tr {
     text-align: center;
-    /* border: 1px solid black; */
     padding: 10px;
     border-radius: 6px;
     background-color: rgb(172, 138, 180);

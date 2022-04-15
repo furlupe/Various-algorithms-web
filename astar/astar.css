@@ -5,6 +5,11 @@
     font-weight: normal; 
 }
 
+body {
+    background-image: url("additionFiles/geo_theme.png");
+    font-family: Genshin;
+}
+
 p{
     position: absolute;
     font-family: Genshin;
@@ -27,10 +32,6 @@ a {
     font-size: 32px;
     top: 12px;
     left: 15px;
-}
-
-body {
-    background-image: url("additionFiles/geo_theme.png");
 }
 
 input[type=range] {

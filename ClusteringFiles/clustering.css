@@ -4,17 +4,21 @@ html{
     background-position: 20% 18%;
     background-color: rgb(254,213,121);
 }
+
 h1{
     font-size: 35px;
 }
 .header{
     text-align: center;
 }
+
 .canvas{
     position: relative;
     display: inline-block;
     margin-top: 33px;
 }
+
+
 #myCanvas, #myCanvas2, #myCanvas3{
     border: none;
     margin: 10px;
