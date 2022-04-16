@@ -221,6 +221,7 @@ function createTargets() {
 
             document.getElementById("pathSearchButton").disabled = false;
             document.getElementById("pathChangeButton").disabled = false;
+            document.getElementById("description").innerHTML = "Можете найти путь, а можете поменять";
         }
     }
 }
@@ -260,6 +261,7 @@ function clearTargets() {
 
     document.getElementById("pathSearchButton").disabled = true;
     document.getElementById("pathChangeButton").disabled = true;
+    document.getElementById("description").innerHTML = "Задайте <font color=#FF0000>начало</font> и <font color=#00FF00>конец</font> пути";
 }
 
 // функция создает таблицу n*n
@@ -318,6 +320,8 @@ function acceptChanges() {
     document.getElementById("acceptChangesButton").innerHTML = "Изменить лабиринт";
     document.getElementById("acceptChangesButton").onclick = makeChanges;
 
+    document.getElementById("description").innerHTML = "Задайте <font color=#FF0000>начало</font> и <font color=#00FF00>конец</font> пути";
+
 }
 
 // действия, обратные acceptChanges()
@@ -335,6 +339,8 @@ function makeChanges() {
     document.getElementById("acceptChangesButton").onclick = acceptChanges;
 
     clearTargets();
+
+    document.getElementById("description").innerHTML = "Создайте лабиринт, нажимая на клетки";
 }
 
 // A*

@@ -218,8 +218,8 @@ div {
 
 #pathbuttonsTheme img {
     position: absolute;
-    left: 167px;
-    top: 217px;
+    left: 175px;
+    top: 360px;
 }
 
 #pathbuttonsTheme input {
@@ -258,15 +258,27 @@ div {
     border-radius: 20px;
 }
 
-#pathbuttonsTheme label {
+
+label {
     position: absolute;
     font-family: Genshin;
     font-size: 20px;
     text-align: center;
+}
+
+#showanimspeed {
     width: 265px;
     left: 148px;
     top: 220px;
 }
+
+#description {
+    font-size: 40px;
+    width: 500px;
+    left: 25px;
+    top: 275px;
+}
+
 
 /* стили input'ов */
 input {

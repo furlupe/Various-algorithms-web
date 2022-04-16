@@ -27,6 +27,7 @@ h1{
     background: url(./extras/3.png) center no-repeat;
     background-color: rgba(250, 192, 158, 0.39);
     background-size: 80%;
+    opacity: 100;
 }
 .clsname{
     position: absolute;
@@ -58,7 +59,8 @@ h1{
 #distances, #count{
     width: 550px;
 }
-#labEps{
+
+input {
     box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
     border: none;
     padding: 4px;
@@ -67,15 +69,7 @@ h1{
     font-family: "Genshin";
     background-color: rgb(253 225 209);
 }
-#labCount{
-    box-shadow: 5px 2px 10px rgba(0,0,0,0.5);
-    border: none;
-    padding: 4px;
-    margin-left: 10px;
-    border-radius: 6px;
-    font-family: "Genshin";
-    background-color: rgb(253 225 209);
-}
+
 #clustButton, #clearButton{
     border: none;
     box-shadow: 5px 2px 10px rgba(0,0,0,0.4);
